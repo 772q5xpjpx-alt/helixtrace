@@ -3,6 +3,7 @@ import pytest
 from dna_trace_reconstruction.pipeline import (
     compact_experiment_payload,
     experiment_as_dict,
+    reconstruct_trace_cluster,
     run_experiment,
 )
 
@@ -63,3 +64,15 @@ def test_pipeline_normalizes_lowercase_source():
 def test_pipeline_rejects_invalid_source():
     with pytest.raises(ValueError, match="Invalid DNA bases"):
         run_experiment("ACNT", cluster_size=3)
+
+
+def test_source_free_cluster_reconstruction_needs_only_observed_reads():
+    candidates = reconstruct_trace_cluster(
+        ["ACGTACGT", "ACGTACGT", "ACGTACGT"],
+        local_search_steps=1,
+    )
+
+    assert candidates.medoid == "ACGTACGT"
+    assert candidates.consensus == "ACGTACGT"
+    assert candidates.unconstrained == "ACGTACGT"
+    assert candidates.constrained == "ACGTACGT"

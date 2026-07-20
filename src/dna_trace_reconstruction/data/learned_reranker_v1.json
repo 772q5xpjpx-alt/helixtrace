@@ -1,0 +1,105 @@
+{
+  "artifact": "HelixTrace learned reranker provenance and evaluation",
+  "model_version": "helixtrace-linear-reranker-v1",
+  "model_type": "standardized ridge regression candidate reranker",
+  "target": "candidate normalized edit distance to a known synthetic source",
+  "inference_inputs": [
+    "noisy trace cluster",
+    "medoid candidate",
+    "alignment consensus candidate",
+    "evidence-only refinement candidate",
+    "biology-aware refinement candidate"
+  ],
+  "source_available_at_inference": false,
+  "parameters": {
+    "location": "src/dna_trace_reconstruction/learned_reranker.py::DEFAULT_MODEL",
+    "feature_count": 24,
+    "ridge_alpha": 10.0,
+    "third_party_ml_runtime": false
+  },
+  "training_split": {
+    "experiments": 80,
+    "candidate_rows": 320,
+    "master_seed": 20260720
+  },
+  "held_out_split": {
+    "experiments": 120,
+    "candidate_rows": 480,
+    "master_seed": 20260721,
+    "disjoint_from_training_by_master_seed": true
+  },
+  "synthetic_distribution": {
+    "sequence_lengths": [40, 60, 80],
+    "cluster_sizes": [3, 5, 7, 10],
+    "insertion_probability_each": [0.02, 0.03, 0.04, 0.05, 0.06, 0.07],
+    "deletion_probability_each": [0.02, 0.03, 0.04, 0.05, 0.06, 0.07],
+    "substitution_probability_each": [0.02, 0.03, 0.04, 0.05, 0.06, 0.07],
+    "probability_sampling_note": "One value is sampled per experiment and used for each of insertion, deletion, and substitution.",
+    "source_gc_fraction": [0.45, 0.55],
+    "source_max_homopolymer_run": 3,
+    "local_search_steps": 3
+  },
+  "features": [
+    "candidate-to-trace evidence cost",
+    "candidate length versus median trace length",
+    "candidate distance from medoid and consensus",
+    "GC and homopolymer constraint summaries",
+    "candidate agreement",
+    "pairwise trace disagreement",
+    "trace length spread",
+    "cluster size",
+    "candidate method identity and interactions"
+  ],
+  "held_out_metrics": {
+    "medoid": {
+      "mean_edit_distance": 5.125,
+      "mean_normalized_edit_distance": 0.08149004885568148,
+      "exact_recovery_percent": 7.5
+    },
+    "consensus": {
+      "mean_edit_distance": 2.25,
+      "mean_normalized_edit_distance": 0.03564596446039947,
+      "exact_recovery_percent": 34.16666666666667
+    },
+    "unconstrained": {
+      "mean_edit_distance": 2.0,
+      "mean_normalized_edit_distance": 0.03162811686692655,
+      "exact_recovery_percent": 35.0
+    },
+    "constrained": {
+      "mean_edit_distance": 2.0,
+      "mean_normalized_edit_distance": 0.03176700575581544,
+      "exact_recovery_percent": 35.0
+    },
+    "learned": {
+      "mean_edit_distance": 1.9916666666666667,
+      "mean_normalized_edit_distance": 0.03152395020025989,
+      "exact_recovery_percent": 35.0
+    },
+    "candidate_oracle": {
+      "mean_edit_distance": 1.9583333333333333,
+      "mean_normalized_edit_distance": 0.031037839089148773,
+      "exact_recovery_percent": 35.0
+    }
+  },
+  "learned_selection_counts": {
+    "medoid": 7,
+    "consensus": 12,
+    "unconstrained": 52,
+    "constrained": 49
+  },
+  "held_out_comparison": {
+    "versus_consensus_relative_mean_ned_reduction_percent": 11.563761347287697,
+    "versus_unconstrained_relative_mean_ned_reduction_percent": 0.329348304563744,
+    "versus_unconstrained_total_edit_reduction_across_120_experiments": 1,
+    "versus_unconstrained_exact_recovery_change_percentage_points": 0.0
+  },
+  "limitations": [
+    "This is one controlled synthetic held-out split, not wet-lab validation.",
+    "The gain over the strongest fixed candidate is one edit across 120 experiments and does not establish broad superiority.",
+    "Exact recovery did not improve over the evidence-only or biology-aware fixed candidates on this split.",
+    "The reranker cannot repair an error absent from all four upstream candidates.",
+    "The simulated channel and constrained source distribution may not match a real DNA storage pipeline."
+  ],
+  "reproduction_command": "python scripts/train_reranker.py --output artifacts/learned_reranker_report.json"
+}

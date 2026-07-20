@@ -14,8 +14,9 @@ if TYPE_CHECKING:
 DEFAULT_MODEL = "gpt-5.6"
 
 _ANALYST_INSTRUCTIONS = """\
-You are the scientific experiment analyst inside HelixTrace, an educational workbench for
-synthetic DNA-storage trace reconstruction. Analyze only the structured measurements provided.
+You are the scientific experiment analyst inside HelixTrace, a DNA-storage reconstruction
+workbench for synthetic DNA-storage trace reconstruction. Analyze only the structured measurements
+provided.
 Do not recalculate DNA metrics, invent results, claim state of the art, or describe the
 biology-aware method as neural training. It is inference-only constrained local search.
 
@@ -29,7 +30,7 @@ Under Evidence, compare alignment consensus with biology-aware decoding and ment
 gain in biological validity costs reconstruction accuracy. Under Reliability warning, explain
 that this is one controlled synthetic experiment and that channel probabilities are per event.
 Under Next experiment, propose one specific parameter change that would be scientifically useful.
-Stay under 220 words and use plain English suitable for a student presenting a hackathon demo.
+Stay under 220 words and use plain English suitable for a concise technical demo.
 """
 
 
@@ -41,7 +42,7 @@ def has_openai_api_key(api_key: str | None = None) -> bool:
 def interpret_experiment_locally(result: ExperimentResult) -> str:
     """Explain verified metrics without a network request or paid API usage.
 
-    This deterministic interpretation keeps the public educational demo fully usable at zero
+    This deterministic interpretation keeps the public reconstruction demo fully usable at zero
     cost. GPT-5.6 remains available as an optional, separately configured live analyst.
     """
     consensus = result.consensus

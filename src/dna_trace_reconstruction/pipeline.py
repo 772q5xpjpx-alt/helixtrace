@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from typing import Any
 
@@ -49,6 +50,16 @@ class CandidateEvaluation:
 
 
 @dataclass(frozen=True)
+class ReconstructionCandidates:
+    """Source-free candidate sequences reconstructed from one trace cluster."""
+
+    medoid: str
+    consensus: str
+    unconstrained: str
+    constrained: str
+
+
+@dataclass(frozen=True)
 class ExperimentResult:
     """Complete, serializable output of one HelixTrace experiment."""
 
@@ -59,6 +70,41 @@ class ExperimentResult:
     consensus: CandidateEvaluation
     unconstrained: CandidateEvaluation
     constrained: CandidateEvaluation
+
+
+def reconstruct_trace_cluster(
+    traces: Iterable[str],
+    *,
+    lambda_gc: float = 1.0,
+    lambda_homopolymer: float = 1.0,
+    local_search_steps: int = 4,
+) -> ReconstructionCandidates:
+    """Reconstruct candidates from observed reads without access to ground truth.
+
+    Keeping this source-free stage separate matters for file recovery: the
+    original strand is unavailable outside a controlled synthetic benchmark.
+    """
+    cluster = tuple(traces)
+    medoid_sequence = trace_medoid(cluster)
+    consensus_sequence = reconstruct_consensus(cluster)
+    unconstrained_sequence = evidence_local_search(
+        consensus_sequence,
+        cluster,
+        max_iterations=local_search_steps,
+    )
+    constrained_sequence = constrained_local_search(
+        consensus_sequence,
+        cluster,
+        lambda_gc=lambda_gc,
+        lambda_homopolymer=lambda_homopolymer,
+        max_iterations=local_search_steps,
+    )
+    return ReconstructionCandidates(
+        medoid=medoid_sequence,
+        consensus=consensus_sequence,
+        unconstrained=unconstrained_sequence,
+        constrained=constrained_sequence,
+    )
 
 
 def _evaluate_candidate(
@@ -110,19 +156,11 @@ def run_experiment(
         rng=random.Random(seed),
     )
 
-    medoid_sequence = trace_medoid(traces)
-    consensus_sequence = reconstruct_consensus(traces)
-    unconstrained_sequence = evidence_local_search(
-        consensus_sequence,
-        traces,
-        max_iterations=local_search_steps,
-    )
-    constrained_sequence = constrained_local_search(
-        consensus_sequence,
+    candidates = reconstruct_trace_cluster(
         traces,
         lambda_gc=lambda_gc,
         lambda_homopolymer=lambda_homopolymer,
-        max_iterations=local_search_steps,
+        local_search_steps=local_search_steps,
     )
 
     config = ExperimentConfig(
@@ -139,15 +177,15 @@ def run_experiment(
         source=normalized_source,
         traces=tuple(traces),
         config=config,
-        medoid=_evaluate_candidate("Trace medoid", medoid_sequence, normalized_source, traces),
+        medoid=_evaluate_candidate("Trace medoid", candidates.medoid, normalized_source, traces),
         consensus=_evaluate_candidate(
-            "Alignment consensus", consensus_sequence, normalized_source, traces
+            "Alignment consensus", candidates.consensus, normalized_source, traces
         ),
         unconstrained=_evaluate_candidate(
-            "Evidence-only refinement", unconstrained_sequence, normalized_source, traces
+            "Evidence-only refinement", candidates.unconstrained, normalized_source, traces
         ),
         constrained=_evaluate_candidate(
-            "Biology-aware decoding", constrained_sequence, normalized_source, traces
+            "Biology-aware decoding", candidates.constrained, normalized_source, traces
         ),
     )
 

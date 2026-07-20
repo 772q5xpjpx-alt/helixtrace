@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dna-trace-reconstruction"
-version = "0.2.0"
-description = "Biology-aware reconstruction for noisy synthetic DNA traces."
+version = "0.3.0"
+description = "ML-assisted recovery of files from noisy synthetic DNA reads."
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
@@ -31,6 +31,9 @@ helixtrace = "dna_trace_reconstruction.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+dna_trace_reconstruction = ["data/*.json"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
