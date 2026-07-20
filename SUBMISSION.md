@@ -8,7 +8,7 @@
 
 ## Submission links
 
-- **Live demo:** [PUBLIC DEMO URL]
+- **Live demo:** https://helixtrace.streamlit.app
 - **GitHub repository:** https://github.com/772q5xpjpx-alt/helixtrace
 - **Demo video:** [PUBLIC YOUTUBE URL]
 - **Codex `/feedback` Session ID:** [CODEX SESSION ID]
@@ -166,7 +166,7 @@ wrong. HelixTrace makes that failure mode explicit.
 - An explainable biology-aware objective with a matched evidence-only control.
 - A reproducible 140-experiment benchmark with both compliant inputs and an adversarial negative
   control.
-- A polished interactive interface, CLI, machine-readable artifacts, and 89 passing tests.
+- A polished interactive interface, CLI, machine-readable artifacts, and 90 passing tests.
 - An optional GPT-5.6 integration with a narrowly defined, auditable role, mocked tests, and
   explicit scientific guardrails.
 

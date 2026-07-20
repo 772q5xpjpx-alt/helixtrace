@@ -107,12 +107,13 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 
 ## Hosting and judge access
 
-- [ ] Deploy a working, free-to-access demo and save its public URL.
-- [ ] Confirm the deployed core app has no `OPENAI_API_KEY`, requires no OpenAI account or credits,
+- [x] Deploy a working, free-to-access demo and save its public URL:
+  https://helixtrace.streamlit.app
+- [x] Confirm the deployed core app has no `OPENAI_API_KEY`, requires no OpenAI account or credits,
   and completes every advertised public workflow.
 - [ ] If the optional analyst is later enabled, use an entrant-funded server-side secret and never
   commit or display it; do not ask judges to provide a key.
-- [ ] Confirm judges can use the core demo without sign-in, payment, geographic restriction, or a
+- [x] Confirm judges can use the core demo without sign-in, payment, geographic restriction, or a
   test account. If access is private, provide working credentials in the testing instructions.
 - [ ] Confirm the hosted app starts reliably after sleeping and presents the optional integration as
   unavailable—not broken—when no maintainer key is configured.

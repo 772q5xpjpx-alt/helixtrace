@@ -2,6 +2,8 @@
 
 **Biology-aware reconstruction for noisy DNA storage reads.**
 
+**Live demo:** https://helixtrace.streamlit.app
+
 HelixTrace is an interactive, reproducible workbench that turns one synthetic DNA strand into a
 cluster of reads with insertion, deletion, and substitution (IDS) errors, reconstructs the hidden
 strand with four transparent methods, and tests whether GC-content and homopolymer rules are useful
@@ -131,9 +133,10 @@ python scripts/run_benchmark.py \
   --output-dir artifacts
 ```
 
-Run the full verification suite:
+Install the developer dependencies and run the full verification suite:
 
 ```bash
+python -m pip install -e ".[dev]"
 pytest -q
 ruff check .
 ruff format --check .
@@ -240,6 +243,5 @@ Released under the [MIT License](LICENSE).
 The core runtime dependency is
 [Streamlit](https://github.com/streamlit/streamlit), distributed under the Apache-2.0 license. The
 [OpenAI Python SDK](https://github.com/openai/openai-python) is confined to the optional `ai` extra.
-The interface uses original CSS and the open-licensed Manrope and DM Mono Google Fonts; no
-third-party media assets are bundled.
+The interface uses original CSS and system fonts; no third-party media assets are bundled.
 See [third-party notices](THIRD_PARTY_NOTICES.md).
