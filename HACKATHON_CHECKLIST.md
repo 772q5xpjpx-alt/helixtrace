@@ -7,19 +7,29 @@
 
 Status key: `[x]` verified locally; `[ ]` still requires action or external confirmation.
 
+## Submission record
+
+- [x] **Submitted successfully to OpenAI Build Week on July 21, 2026 at 01:44 CEST.**
+- [x] Devpost displayed `Project submitted!` and lists HelixTrace under **SUBMITTED TO — OpenAI
+  Build Week**: https://devpost.com/software/helixtrace
+- [x] Submitted repository commit: `af9ed923e60359e2c416eb2e7d0be0904a884d0f` (`main`).
+- [x] Final GitHub Actions CI completed successfully for the submitted commit.
+- [x] Anonymous Streamlit session check followed the normal authentication bootstrap back to the
+  app and returned HTTP 200: https://helixtrace.streamlit.app
+
 ## Eligibility and registration
 
-- [ ] Confirm the entrant is at least the age of majority in their place of residence, or use an
+- [x] Confirm the entrant is at least the age of majority in their place of residence, or use an
   eligible parent/guardian where required.
 - [ ] Confirm residence in an OpenAI API-supported country or territory and that no excluded
   jurisdiction, employment relationship, judging relationship, or conflict of interest applies.
 - [ ] Confirm the project was not developed with prohibited financial or preferential support
   from OpenAI or Devpost.
-- [ ] Create or sign in to the entrant's Devpost account.
-- [ ] Click **Join Hackathon** at `openai.devpost.com` before registration closes.
-- [ ] Confirm the entry is individual; if entering as a team or organization, appoint an eligible
+- [x] Create or sign in to the entrant's Devpost account.
+- [x] Click **Join Hackathon** at `openai.devpost.com` before registration closes.
+- [x] Confirm the entry is individual; if entering as a team or organization, appoint an eligible
   authorized representative and list every contributor accurately.
-- [ ] Confirm the entrant has an OpenAI account and access to Codex. API access is needed only if
+- [x] Confirm the entrant has an OpenAI account and access to Codex. API access is needed only if
   the optional maintainer extension will be enabled.
 
 ## Project compliance
@@ -31,9 +41,9 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 - [x] GPT-5.6 Sol was used through Codex to develop and validate the Build Week extension.
 - [x] The code includes a separate, optional Responses API analyst configured for `gpt-5.6` and
   covered by mocked integration tests.
-- [ ] Do not advertise the optional analyst as live unless an actual call is completed and the
+- [x] Do not advertise the optional analyst as live unless an actual call is completed and the
   entrant—not a judge—provides the deployed server-side key.
-- [ ] Confirm the deployed project behaves exactly as shown in the video and described on Devpost.
+- [x] Confirm the deployed project behaves exactly as shown in the video and described on Devpost.
 - [x] Verify all third-party packages, data, fonts, images, and other assets are authorized and
   comply with their licenses; add attribution where appropriate.
 - [ ] Confirm the submission is original, solely owned by the entrant/team, contains no secrets or
@@ -53,7 +63,7 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
   Streamlit product experience, GPT-5.6 Sol development through Codex, and an optional analyst.
 - [x] Add the Build Week file codec, constraint-preserving encoder, integrity-verified file recovery,
   learned reranker with disjoint held-out evaluation, file benchmark, CLI, and downloadable UI.
-- [ ] Back the distinction with dated commits, timestamped Codex session evidence, or equivalent.
+- [x] Back the distinction with dated commits, timestamped Codex session evidence, or equivalent.
   Only work added during the Submission Period will be evaluated.
 
 ## Repository and testing
@@ -73,7 +83,7 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 - [x] Make the repository public, or share a private repository with both
   `testing@devpost.com` and `build-week-event@openai.com`.
 - [x] Confirm the repository URL works without repository credentials.
-- [ ] Tag or record the exact commit submitted to Devpost.
+- [x] Tag or record the exact commit submitted to Devpost.
 
 ## README and Codex evidence
 
@@ -106,7 +116,7 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 - [ ] Record at readable resolution with legible text and clean audio.
 - [x] Upload the final video to YouTube as **Public** and keep it publicly visible:
   https://youtu.be/ZfXLHUCXbVg
-- [ ] Verify the full YouTube video and audio in a signed-out/incognito browser.
+- [x] Verify the full YouTube video and audio in a signed-out/incognito browser.
 - [x] Save the public YouTube URL for Devpost.
 
 ## Hosting and judge access
@@ -123,37 +133,37 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
   unavailable—not broken—when no maintainer key is configured.
 - [ ] Keep the project free and unrestricted for judging through **August 5, 2026 at 5:00 PM PT**
   (August 6 at 2:00 AM Europe/Madrid).
-- [ ] Confirm the deployed URL, repository URL, and YouTube URL all work from a clean browser.
+- [x] Confirm the deployed URL, repository URL, and YouTube URL all work from a clean browser.
 
 ## Devpost form
 
-- [ ] Create the submission draft before the deadline.
-- [ ] Enter the final project title and select the correct category.
-- [ ] Write an English description covering the real audience, problem, features, technical
+- [x] Create the submission draft before the deadline.
+- [x] Enter the final project title and select the correct category.
+- [x] Write an English description covering the real audience, problem, features, technical
   implementation, Codex/GPT-5.6 Sol development workflow, optional API role, impact, novelty, and
   limitations.
-- [ ] Address all four equally weighted judging dimensions: technological implementation, design,
+- [x] Address all four equally weighted judging dimensions: technological implementation, design,
   potential impact, and quality of the idea.
 - [ ] Add clear screenshots or project images that match the final app.
-- [ ] Add the public repository URL, deployed demo URL, and public YouTube URL.
-- [ ] Add concise testing instructions and any credentials if genuinely required.
-- [ ] Add the required `/feedback` Codex Session ID.
-- [ ] List every team member/contributor accurately and confirm ownership.
-- [ ] Review every field in English and confirm all statements match the repository, video, and app.
-- [ ] Submit the entry; saving a draft is not a final submission.
+- [x] Add the public repository URL, deployed demo URL, and public YouTube URL.
+- [x] Add concise testing instructions and any credentials if genuinely required.
+- [x] Add the required `/feedback` Codex Session ID.
+- [x] List every team member/contributor accurately and confirm ownership.
+- [x] Review every field in English and confirm all statements match the repository, video, and app.
+- [x] Submit the entry; saving a draft is not a final submission.
 
 ## Final verification
 
-- [ ] Run tests and lint once more against the exact final commit.
-- [ ] Reinstall and launch from the README instructions using the exact final repository.
+- [x] Run tests and lint once more against the exact final commit.
+- [x] Reinstall and launch from the README instructions using the exact final repository.
 - [ ] Test the public app's default learned file recovery, SHA-gated download, parameter controls,
   high-noise failure, fragment evidence, strand sandbox, guided interpretation, and no-key path.
   Test a live analyst only if it is explicitly enabled.
-- [ ] Open the repository, hosted demo, and YouTube video from a signed-out/incognito browser.
+- [x] Open the repository, hosted demo, and YouTube video from a signed-out/incognito browser.
 - [ ] Confirm there are no secrets, broken links, inaccurate claims, stale screenshots, or private
   resources in any submission material.
-- [ ] Confirm the Build Week disclosure and dated Codex/commit evidence are visible to judges.
-- [ ] Confirm the Devpost entry shows **Submitted**, not Draft, before the deadline.
+- [x] Confirm the Build Week disclosure and dated Codex/commit evidence are visible to judges.
+- [x] Confirm the Devpost entry shows **Submitted**, not Draft, before the deadline.
 - [ ] Save screenshots or confirmation emails proving successful submission and the submitted URLs.
 - [ ] Do not rely on last-minute uploads; no substantive changes are permitted after the Submission
   Period unless OpenAI/Devpost expressly allows a limited correction.
