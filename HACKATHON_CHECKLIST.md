@@ -89,7 +89,7 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 - [x] Include the pre-existing versus Build Week disclosure described above.
 - [x] Include limitations and an honest “What did not work / What comes next” section.
 - [x] Add license and third-party attribution links.
-- [ ] Run `/feedback` in the Codex project thread where most core functionality was built and save
+- [x] Run `/feedback` in the Codex project thread where most core functionality was built and save
   the resulting **Codex Session ID** for the submission form.
 
 ## Demonstration video
@@ -104,9 +104,10 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
   aloud or visibly.
 - [ ] Avoid unlicensed music, third-party trademarks, and copyrighted material.
 - [ ] Record at readable resolution with legible text and clean audio.
-- [ ] Upload the final video to YouTube as **Public** and keep it publicly visible.
+- [x] Upload the final video to YouTube as **Public** and keep it publicly visible:
+  https://youtu.be/ZfXLHUCXbVg
 - [ ] Verify the full YouTube video and audio in a signed-out/incognito browser.
-- [ ] Save the public YouTube URL for Devpost.
+- [x] Save the public YouTube URL for Devpost.
 
 ## Hosting and judge access
 

@@ -1,6 +1,7 @@
 # HelixTrace demo video
 
-**Target length:** 2:10–2:25<br>
+**Final runtime:** 2:57<br>
+**Public video:** https://youtu.be/ZfXLHUCXbVg<br>
 **Audio:** Álvaro's natural voice; no synthetic narration and no copyrighted music<br>
 **Visual style:** real product interaction, visible cursor, short zooms, almost no title cards
 
@@ -40,9 +41,9 @@
 
 ## Final compliance check
 
-- [ ] Public YouTube visibility.
+- [x] Public YouTube visibility.
 - [ ] Clear audio in English with Álvaro's own voice.
 - [ ] Real demo matches the deployed build.
 - [ ] Codex and GPT-5.6 use explained aloud.
 - [ ] No third-party music, trademarks used as decoration, secrets, or personal notifications.
-- [ ] Final video remains under three minutes.
+- [x] Final video remains under three minutes.
