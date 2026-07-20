@@ -1,9 +1,9 @@
 import itertools
 
 import pytest
-from dna_trace_reconstruction.metrics import levenshtein_distance
 
 import dna_trace_reconstruction.reconstruction as reconstruction
+from dna_trace_reconstruction.metrics import levenshtein_distance
 from dna_trace_reconstruction.reconstruction import (
     AlignmentCalls,
     consensus_round,
