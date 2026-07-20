@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dna-trace-reconstruction"
+version = "0.2.0"
+description = "Biology-aware reconstruction for noisy synthetic DNA traces."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "Alvaro"},
+]
+dependencies = [
+    "streamlit==1.59.2",
+]
+
+[project.optional-dependencies]
+ai = [
+    "openai==2.46.0",
+]
+dev = [
+    "openai==2.46.0",
+    "pytest==9.1.1",
+    "ruff==0.15.21",
+]
+
+[project.scripts]
+dna-ids-demo = "dna_trace_reconstruction.cli:main"
+helixtrace = "dna_trace_reconstruction.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

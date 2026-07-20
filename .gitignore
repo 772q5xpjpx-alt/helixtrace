@@ -1,0 +1,17 @@
+.DS_Store
+.codex/
+.idea/
+.vscode/
+.venv/
+venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.playwright-cli/
+.env
+.streamlit/secrets.toml
+build/
+dist/
+outputs/
+results/

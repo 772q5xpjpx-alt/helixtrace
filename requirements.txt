@@ -1,0 +1,2 @@
+# Complete zero-cost application. The optional OpenAI SDK is not installed.
+-e .

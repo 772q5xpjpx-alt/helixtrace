@@ -1,0 +1,409 @@
+{
+  "benchmark": "HelixTrace controlled synthetic benchmark",
+  "master_seed": 20260720,
+  "sequence_length": 60,
+  "samples_per_cell": 20,
+  "event_probability_note": "Insertion, deletion, and substitution each use this categorical per-event value.",
+  "elapsed_seconds": 108.65284629201051,
+  "summary": [
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 3,
+      "event_probability": 0.03,
+      "method": "consensus",
+      "experiments": 20,
+      "exact_recovery_percent": 5.0,
+      "mean_edit_distance": 2.1,
+      "mean_normalized_edit_distance": 0.03472677595628415,
+      "biologically_valid_percent": 60.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 3,
+      "event_probability": 0.03,
+      "method": "constrained",
+      "experiments": 20,
+      "exact_recovery_percent": 15.0,
+      "mean_edit_distance": 1.75,
+      "mean_normalized_edit_distance": 0.028934426229508196,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 3,
+      "event_probability": 0.03,
+      "method": "medoid",
+      "experiments": 20,
+      "exact_recovery_percent": 5.0,
+      "mean_edit_distance": 3.95,
+      "mean_normalized_edit_distance": 0.06523929138022211,
+      "biologically_valid_percent": 55.00000000000001
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 3,
+      "event_probability": 0.03,
+      "method": "unconstrained",
+      "experiments": 20,
+      "exact_recovery_percent": 10.0,
+      "mean_edit_distance": 1.85,
+      "mean_normalized_edit_distance": 0.030560109289617488,
+      "biologically_valid_percent": 60.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 3,
+      "event_probability": 0.06,
+      "method": "consensus",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 6.15,
+      "mean_normalized_edit_distance": 0.10186629649215583,
+      "biologically_valid_percent": 70.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 3,
+      "event_probability": 0.06,
+      "method": "constrained",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 5.4,
+      "mean_normalized_edit_distance": 0.0894341618191433,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 3,
+      "event_probability": 0.06,
+      "method": "medoid",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 8.3,
+      "mean_normalized_edit_distance": 0.13682472530700981,
+      "biologically_valid_percent": 45.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 3,
+      "event_probability": 0.06,
+      "method": "unconstrained",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 5.5,
+      "mean_normalized_edit_distance": 0.09107394676537987,
+      "biologically_valid_percent": 75.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 5,
+      "event_probability": 0.03,
+      "method": "consensus",
+      "experiments": 20,
+      "exact_recovery_percent": 65.0,
+      "mean_edit_distance": 0.4,
+      "mean_normalized_edit_distance": 0.006585580821434867,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 5,
+      "event_probability": 0.03,
+      "method": "constrained",
+      "experiments": 20,
+      "exact_recovery_percent": 75.0,
+      "mean_edit_distance": 0.3,
+      "mean_normalized_edit_distance": 0.0049189141547682,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 5,
+      "event_probability": 0.03,
+      "method": "medoid",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 2.85,
+      "mean_normalized_edit_distance": 0.04661788795844851,
+      "biologically_valid_percent": 80.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 5,
+      "event_probability": 0.03,
+      "method": "unconstrained",
+      "experiments": 20,
+      "exact_recovery_percent": 75.0,
+      "mean_edit_distance": 0.3,
+      "mean_normalized_edit_distance": 0.0049189141547682,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 5,
+      "event_probability": 0.06,
+      "method": "consensus",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 5.2,
+      "mean_normalized_edit_distance": 0.08600343733474353,
+      "biologically_valid_percent": 70.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 5,
+      "event_probability": 0.06,
+      "method": "constrained",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 4,
+      "mean_normalized_edit_distance": 0.06615282919090429,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 5,
+      "event_probability": 0.06,
+      "method": "medoid",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 8.45,
+      "mean_normalized_edit_distance": 0.139128180269111,
+      "biologically_valid_percent": 65.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 5,
+      "event_probability": 0.06,
+      "method": "unconstrained",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 3.95,
+      "mean_normalized_edit_distance": 0.06531949585757095,
+      "biologically_valid_percent": 80.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 10,
+      "event_probability": 0.03,
+      "method": "consensus",
+      "experiments": 20,
+      "exact_recovery_percent": 80.0,
+      "mean_edit_distance": 0.2,
+      "mean_normalized_edit_distance": 0.003333333333333333,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 10,
+      "event_probability": 0.03,
+      "method": "constrained",
+      "experiments": 20,
+      "exact_recovery_percent": 85.0,
+      "mean_edit_distance": 0.15,
+      "mean_normalized_edit_distance": 0.0025,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 10,
+      "event_probability": 0.03,
+      "method": "medoid",
+      "experiments": 20,
+      "exact_recovery_percent": 5.0,
+      "mean_edit_distance": 2.25,
+      "mean_normalized_edit_distance": 0.03736338797814208,
+      "biologically_valid_percent": 75.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 10,
+      "event_probability": 0.03,
+      "method": "unconstrained",
+      "experiments": 20,
+      "exact_recovery_percent": 85.0,
+      "mean_edit_distance": 0.15,
+      "mean_normalized_edit_distance": 0.0025,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 10,
+      "event_probability": 0.06,
+      "method": "consensus",
+      "experiments": 20,
+      "exact_recovery_percent": 15.0,
+      "mean_edit_distance": 2,
+      "mean_normalized_edit_distance": 0.03329234972677596,
+      "biologically_valid_percent": 85.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 10,
+      "event_probability": 0.06,
+      "method": "constrained",
+      "experiments": 20,
+      "exact_recovery_percent": 20.0,
+      "mean_edit_distance": 1.65,
+      "mean_normalized_edit_distance": 0.02745901639344262,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 10,
+      "event_probability": 0.06,
+      "method": "medoid",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 6.75,
+      "mean_normalized_edit_distance": 0.11172586520947177,
+      "biologically_valid_percent": 65.0
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "cluster_size": 10,
+      "event_probability": 0.06,
+      "method": "unconstrained",
+      "experiments": 20,
+      "exact_recovery_percent": 25.0,
+      "mean_edit_distance": 1.55,
+      "mean_normalized_edit_distance": 0.025792349726775958,
+      "biologically_valid_percent": 95.0
+    },
+    {
+      "source_profile": "gc-negative-control",
+      "cluster_size": 5,
+      "event_probability": 0.03,
+      "method": "consensus",
+      "experiments": 20,
+      "exact_recovery_percent": 45.0,
+      "mean_edit_distance": 0.75,
+      "mean_normalized_edit_distance": 0.012446236559139784,
+      "biologically_valid_percent": 0
+    },
+    {
+      "source_profile": "gc-negative-control",
+      "cluster_size": 5,
+      "event_probability": 0.03,
+      "method": "constrained",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 3.35,
+      "mean_normalized_edit_distance": 0.0557258064516129,
+      "biologically_valid_percent": 0
+    },
+    {
+      "source_profile": "gc-negative-control",
+      "cluster_size": 5,
+      "event_probability": 0.03,
+      "method": "medoid",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 2.85,
+      "mean_normalized_edit_distance": 0.047004608294930875,
+      "biologically_valid_percent": 0
+    },
+    {
+      "source_profile": "gc-negative-control",
+      "cluster_size": 5,
+      "event_probability": 0.03,
+      "method": "unconstrained",
+      "experiments": 20,
+      "exact_recovery_percent": 55.00000000000001,
+      "mean_edit_distance": 0.65,
+      "mean_normalized_edit_distance": 0.010779569892473119,
+      "biologically_valid_percent": 0
+    }
+  ],
+  "overall": [
+    {
+      "source_profile": "constraint-compliant",
+      "method": "consensus",
+      "experiments": 120,
+      "exact_recovery_percent": 27.500000000000004,
+      "mean_edit_distance": 2.675,
+      "mean_normalized_edit_distance": 0.044301295610787945,
+      "biologically_valid_percent": 80.83333333333333
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "method": "constrained",
+      "experiments": 120,
+      "exact_recovery_percent": 32.5,
+      "mean_edit_distance": 2.2083333333333335,
+      "mean_normalized_edit_distance": 0.036566557964627766,
+      "biologically_valid_percent": 100
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "method": "medoid",
+      "experiments": 120,
+      "exact_recovery_percent": 1.6666666666666667,
+      "mean_edit_distance": 5.425,
+      "mean_normalized_edit_distance": 0.08948322301706754,
+      "biologically_valid_percent": 64.16666666666667
+    },
+    {
+      "source_profile": "constraint-compliant",
+      "method": "unconstrained",
+      "experiments": 120,
+      "exact_recovery_percent": 32.5,
+      "mean_edit_distance": 2.216666666666667,
+      "mean_normalized_edit_distance": 0.03669413596568541,
+      "biologically_valid_percent": 85.0
+    },
+    {
+      "source_profile": "gc-negative-control",
+      "method": "consensus",
+      "experiments": 20,
+      "exact_recovery_percent": 45.0,
+      "mean_edit_distance": 0.75,
+      "mean_normalized_edit_distance": 0.012446236559139784,
+      "biologically_valid_percent": 0
+    },
+    {
+      "source_profile": "gc-negative-control",
+      "method": "constrained",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 3.35,
+      "mean_normalized_edit_distance": 0.0557258064516129,
+      "biologically_valid_percent": 0
+    },
+    {
+      "source_profile": "gc-negative-control",
+      "method": "medoid",
+      "experiments": 20,
+      "exact_recovery_percent": 0,
+      "mean_edit_distance": 2.85,
+      "mean_normalized_edit_distance": 0.047004608294930875,
+      "biologically_valid_percent": 0
+    },
+    {
+      "source_profile": "gc-negative-control",
+      "method": "unconstrained",
+      "experiments": 20,
+      "exact_recovery_percent": 55.00000000000001,
+      "mean_edit_distance": 0.65,
+      "mean_normalized_edit_distance": 0.010779569892473119,
+      "biologically_valid_percent": 0
+    }
+  ],
+  "constraint_compliant_source_rules": {
+    "minimum_gc_fraction": 0.45,
+    "maximum_gc_fraction": 0.55,
+    "maximum_homopolymer_run": 3
+  },
+  "cluster_sizes": [
+    3,
+    5,
+    10
+  ],
+  "event_probabilities": [
+    0.03,
+    0.06
+  ],
+  "local_search_steps": 3,
+  "lambda_gc": 1.0,
+  "lambda_homopolymer": 1.0
+}

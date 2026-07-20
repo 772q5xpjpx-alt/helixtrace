@@ -1,0 +1,9 @@
+source_profile,method,experiments,exact_recovery_percent,mean_edit_distance,mean_normalized_edit_distance,biologically_valid_percent
+constraint-compliant,consensus,120,27.500000000000004,2.675,0.044301295610787945,80.83333333333333
+constraint-compliant,constrained,120,32.5,2.2083333333333335,0.036566557964627766,100
+constraint-compliant,medoid,120,1.6666666666666667,5.425,0.08948322301706754,64.16666666666667
+constraint-compliant,unconstrained,120,32.5,2.216666666666667,0.03669413596568541,85.0
+gc-negative-control,consensus,20,45.0,0.75,0.012446236559139784,0
+gc-negative-control,constrained,20,0,3.35,0.0557258064516129,0
+gc-negative-control,medoid,20,0,2.85,0.047004608294930875,0
+gc-negative-control,unconstrained,20,55.00000000000001,0.65,0.010779569892473119,0
