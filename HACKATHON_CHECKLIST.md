@@ -24,10 +24,10 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 
 ## Project compliance
 
-- [ ] Select the most defensible track. **Education** is the likely fit if the submission emphasizes
-  the interactive scientific workbench and transparent teaching of DNA trace reconstruction.
-- [x] A working local Streamlit application reconstructs controlled synthetic DNA traces and
-  presents a coherent, English-language product experience.
+- [x] Select **Developer Tools**: HelixTrace is a reconstruction and benchmarking workbench for
+  DNA-storage researchers and engineers, with a hosted sandbox and reproducible CLI.
+- [x] A working local Streamlit application completes a small binary file → constrained DNA →
+  noisy reads → source-free reconstruction → SHA-256-verified file workflow in English.
 - [x] GPT-5.6 Sol was used through Codex to develop and validate the Build Week extension.
 - [x] The code includes a separate, optional Responses API analyst configured for `gpt-5.6` and
   covered by mocked integration tests.
@@ -38,9 +38,9 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
   comply with their licenses; add attribution where appropriate.
 - [ ] Confirm the submission is original, solely owned by the entrant/team, contains no secrets or
   personal data, and does not infringe copyright, trademark, patent, privacy, or other rights.
-- [ ] Keep claims precise: this is controlled synthetic, uncoded reconstruction with
-  inference-time biological constraints—not a neural training-loss result, CNR validation,
-  TrellisBMA reproduction, or state-of-the-art claim.
+- [x] Keep claims precise: this is controlled synthetic reconstruction with known fragment routing,
+  a constrained encoder, deterministic candidates, and a small learned reranker—not wet-lab/CNR
+  validation, a transformer, a differentiable training-loss result, or a state-of-the-art claim.
 
 ### Required pre-existing-project disclosure
 
@@ -51,26 +51,28 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 - [x] State that Build Week added the end-to-end reconstruction pipeline, alignment-aware
   consensus, medoid and equal-budget search controls, biological constraints, benchmark artifacts,
   Streamlit product experience, GPT-5.6 Sol development through Codex, and an optional analyst.
+- [x] Add the Build Week file codec, constraint-preserving encoder, integrity-verified file recovery,
+  learned reranker with disjoint held-out evaluation, file benchmark, CLI, and downloadable UI.
 - [ ] Back the distinction with dated commits, timestamped Codex session evidence, or equivalent.
   Only work added during the Submission Period will be evaluated.
 
 ## Repository and testing
 
 - [x] MIT license is present.
-- [x] Automated suite currently passes: **90 tests**.
+- [x] Automated suite currently passes: **151 tests**.
 - [x] Current Ruff quality checks pass.
 - [x] The default experiment and Streamlit render path have been smoke-tested locally.
 - [x] Run the exact documented install and start commands in a clean environment or fresh clone.
-- [ ] Confirm a clean core install does not install the OpenAI SDK or require an API key. Test the
+- [x] Confirm a clean core install does not install the OpenAI SDK or require an API key. Test the
   optional analyst separately only if it will be advertised as live.
 - [ ] Scan the entire repository and Git history for API keys, tokens, credentials, private paths,
   personal data, generated junk, and oversized files.
 - [ ] Create an intentional Git history that preserves honest timing and clearly identifies Build
   Week additions.
-- [ ] Create and push the final GitHub repository.
-- [ ] Make the repository public, or share a private repository with both
+- [x] Create and push the public GitHub repository: https://github.com/772q5xpjpx-alt/helixtrace
+- [x] Make the repository public, or share a private repository with both
   `testing@devpost.com` and `build-week-event@openai.com`.
-- [ ] Confirm the repository URL works in a signed-out/incognito browser.
+- [x] Confirm the repository URL works without repository credentials.
 - [ ] Tag or record the exact commit submitted to Devpost.
 
 ## README and Codex evidence
@@ -93,12 +95,13 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 ## Demonstration video
 
 - [x] Write a script that fits comfortably under three minutes; judges need not watch beyond 3:00.
-- [ ] Show the live product, not slides alone: generate noisy traces, compare reconstruction methods,
-  isolate evidence-only versus biology-aware search, and generate the local guided interpretation
-  without an account or API key.
+- [ ] Show the live product, not slides alone: run the file recovery, reveal the SHA-256 gate and
+  enabled download, inspect one corrupted read/reconstructed fragment, then show the held-out ML
+  and end-to-end benchmark results.
 - [ ] Explain clearly with audio what was built and how Codex powered by GPT-5.6 Sol was used during
   development; do not claim a live Responses API call.
-- [ ] State the controlled-synthetic and inference-only limitations aloud or visibly.
+- [ ] State the controlled-synthetic, known-routing, no-ECC, small-file, and no-wet-lab limitations
+  aloud or visibly.
 - [ ] Avoid unlicensed music, third-party trademarks, and copyrighted material.
 - [ ] Record at readable resolution with legible text and clean audio.
 - [ ] Upload the final video to YouTube as **Public** and keep it publicly visible.
@@ -142,9 +145,9 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 
 - [ ] Run tests and lint once more against the exact final commit.
 - [ ] Reinstall and launch from the README instructions using the exact final repository.
-- [ ] Test the public app's default reconstruction, parameter controls, validation, comparison
-  metrics, free guided interpretation, and no-key completion path. Test a live analyst only if it is
-  explicitly enabled.
+- [ ] Test the public app's default learned file recovery, SHA-gated download, parameter controls,
+  high-noise failure, fragment evidence, strand sandbox, guided interpretation, and no-key path.
+  Test a live analyst only if it is explicitly enabled.
 - [ ] Open the repository, hosted demo, and YouTube video from a signed-out/incognito browser.
 - [ ] Confirm there are no secrets, broken links, inaccurate claims, stale screenshots, or private
   resources in any submission material.

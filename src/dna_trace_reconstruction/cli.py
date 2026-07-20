@@ -3,9 +3,14 @@
 from __future__ import annotations
 
 import argparse
+import mimetypes
+from pathlib import Path
 
 from dna_trace_reconstruction.ai_analyst import analyze_experiment
+from dna_trace_reconstruction.file_pipeline import SUPPORTED_DECODERS, run_file_recovery
 from dna_trace_reconstruction.pipeline import run_experiment
+
+DEFAULT_SEQUENCE = "ACGTACGTACGT"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -13,10 +18,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Reconstruct a source from a synthetic cluster of noisy DNA traces."
     )
-    parser.add_argument(
+    input_group = parser.add_mutually_exclusive_group()
+    input_group.add_argument(
         "--sequence",
-        default="ACGTACGTACGT",
-        help="Source DNA sequence (default: %(default)s)",
+        help=f"Source DNA sequence (default when no file is supplied: {DEFAULT_SEQUENCE})",
+    )
+    input_group.add_argument(
+        "--input-file",
+        type=Path,
+        help="Recover a binary file through the synthetic DNA channel instead of one strand",
     )
     parser.add_argument(
         "--cluster-size",
@@ -68,7 +78,77 @@ def build_parser() -> argparse.ArgumentParser:
             "OPENAI_API_KEY"
         ),
     )
+    parser.add_argument(
+        "--file-decoder",
+        choices=SUPPORTED_DECODERS,
+        default="consensus",
+        help="Decoder for --input-file (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--fragment-bases",
+        type=int,
+        default=64,
+        help="Payload bases per known file fragment (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--output-file",
+        type=Path,
+        help="Write verified recovered bytes here (used only with --input-file)",
+    )
     return parser
+
+
+def _run_file_command(parser: argparse.ArgumentParser, arguments: argparse.Namespace) -> None:
+    """Run the binary file path and optionally write only integrity-verified output."""
+    if arguments.ai_analysis:
+        parser.error("--ai-analysis applies to --sequence experiments, not --input-file")
+    try:
+        payload = arguments.input_file.read_bytes()
+    except OSError as error:
+        parser.error(f"could not read --input-file: {error}")
+
+    media_type = mimetypes.guess_type(arguments.input_file.name)[0] or "application/octet-stream"
+    try:
+        result = run_file_recovery(
+            payload,
+            filename=arguments.input_file.name,
+            media_type=media_type,
+            fragment_bases=arguments.fragment_bases,
+            cluster_size=arguments.cluster_size,
+            insertion_probability=arguments.insertion_probability,
+            deletion_probability=arguments.deletion_probability,
+            substitution_probability=arguments.substitution_probability,
+            seed=arguments.seed,
+            decoder=arguments.file_decoder,
+            lambda_gc=arguments.lambda_gc,
+            lambda_homopolymer=arguments.lambda_homopolymer,
+        )
+    except (TypeError, ValueError) as error:
+        parser.error(str(error))
+
+    print(f"Input file: {arguments.input_file} ({result.original_size_bytes} bytes)")
+    print(
+        f"DNA representation: {result.encoded_nucleotides} nt in "
+        f"{result.fragment_count} known fragments"
+    )
+    print(
+        f"Synthetic evidence: {arguments.cluster_size} reads/fragment; "
+        f"decoder={arguments.file_decoder}; seed={arguments.seed}"
+    )
+    print(f"Exact reconstructed fragments: {result.exact_fragment_count}/{result.fragment_count}")
+    print(f"Expected SHA-256: {result.original_sha256}")
+
+    if not result.checksum_verified or result.recovered_data is None:
+        print(f"RECOVERY FAILED: {result.error}")
+        raise SystemExit(1)
+
+    print("RECOVERY VERIFIED: decoded bytes match the embedded SHA-256 digest")
+    if arguments.output_file is not None:
+        try:
+            arguments.output_file.write_bytes(result.recovered_data)
+        except OSError as error:
+            parser.error(f"could not write --output-file: {error}")
+        print(f"Wrote verified file: {arguments.output_file}")
 
 
 def main() -> None:
@@ -76,9 +156,15 @@ def main() -> None:
     parser = build_parser()
     arguments = parser.parse_args()
 
+    if arguments.output_file is not None and arguments.input_file is None:
+        parser.error("--output-file requires --input-file")
+    if arguments.input_file is not None:
+        _run_file_command(parser, arguments)
+        return
+
     try:
         result = run_experiment(
-            source=arguments.sequence,
+            source=arguments.sequence or DEFAULT_SEQUENCE,
             cluster_size=arguments.cluster_size,
             insertion_probability=arguments.insertion_probability,
             deletion_probability=arguments.deletion_probability,

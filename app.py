@@ -4,9 +4,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import html
 import math
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -25,6 +27,11 @@ DEFAULT_SUBSTITUTION_PROBABILITY = 0.06
 DEFAULT_SEED = 42
 DEFAULT_LAMBDA_GC = 1.0
 DEFAULT_LAMBDA_HOMOPOLYMER = 1.0
+DEFAULT_FILE_DATA = b"HELIX"
+DEFAULT_FILE_NAME = "proof.txt"
+DEFAULT_FILE_MEDIA_TYPE = "text/plain"
+DEFAULT_FILE_SEED = 43
+MAX_INTERACTIVE_FILE_BYTES = 256
 
 
 st.set_page_config(
@@ -299,6 +306,68 @@ st.markdown(
         margin-top: 0.22rem;
       }
 
+      .pipeline-flow {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.62rem;
+        margin: 1rem 0;
+      }
+
+      .pipeline-stage {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 0.85rem;
+        background: rgba(255, 255, 255, 0.75);
+        min-height: 105px;
+      }
+
+      .pipeline-stage strong {
+        display: block;
+        color: var(--ink);
+        font-size: 0.82rem;
+        margin: 0.22rem 0;
+      }
+
+      .pipeline-stage span {
+        color: var(--muted);
+        font-size: 0.7rem;
+        line-height: 1.35;
+      }
+
+      .stage-number {
+        color: var(--mint) !important;
+        font: 700 0.65rem/1 var(--font-mono) !important;
+      }
+
+      .integrity-panel {
+        border: 1px solid rgba(13, 124, 102, 0.28);
+        border-radius: 18px;
+        padding: 1.1rem 1.25rem;
+        background: linear-gradient(115deg, #e3f6ee, rgba(255,255,255,0.92));
+        margin: 1rem 0;
+      }
+
+      .integrity-panel.failed {
+        border-color: rgba(232, 119, 88, 0.38);
+        background: linear-gradient(115deg, #fae9e3, rgba(255,255,255,0.92));
+      }
+
+      .hash-value {
+        color: #35544d;
+        font: 500 0.7rem/1.5 var(--font-mono);
+        overflow-wrap: anywhere;
+      }
+
+      .selection-pill {
+        display: inline-flex;
+        margin: 0.25rem 0.3rem 0.25rem 0;
+        border-radius: 999px;
+        padding: 0.38rem 0.62rem;
+        color: var(--mint-dark);
+        background: var(--mint-soft);
+        font: 600 0.68rem/1 var(--font-mono);
+      }
+
       .method-card {
         height: 100%;
         min-height: 365px;
@@ -528,6 +597,7 @@ st.markdown(
 
       @media (max-width: 900px) {
         .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .pipeline-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .quality-row { grid-template-columns: 110px 1fr 42px; }
       }
 
@@ -550,6 +620,7 @@ try:
         has_openai_api_key,
         interpret_experiment_locally,
     )
+    from dna_trace_reconstruction.file_pipeline import run_file_recovery
     from dna_trace_reconstruction.pipeline import run_experiment
 except ImportError as import_error:
     st.error(
@@ -740,20 +811,73 @@ def _run_configuration(configuration: dict[str, Any]) -> Any | None:
         return None
 
 
+def _run_file_configuration(
+    data: bytes,
+    filename: str,
+    media_type: str,
+    configuration: dict[str, Any],
+) -> Any | None:
+    """Run the file pipeline and keep validation failures inside the product UI."""
+    try:
+        with st.spinner("Encoding bytes, simulating reads, and reconstructing every fragment…"):
+            return run_file_recovery(
+                data,
+                filename=filename,
+                media_type=media_type,
+                **configuration,
+            )
+    except Exception as error:  # Streamlit must remain usable after invalid uploads/settings.
+        st.error(f"The file recovery run could not be completed: {error}")
+        return None
+
+
+def _file_pipeline_markup(result: Any) -> str:
+    """Build the five-stage file recovery flow from a completed result."""
+    checksum_verified = bool(_value(result, "checksum_verified", False))
+    config = _value(result, "config")
+    decoder = str(_value(config, "decoder", "—"))
+    verification = "SHA-256 match" if checksum_verified else "Integrity failure"
+    return _compact_html(f"""
+      <div class="pipeline-flow">
+        <div class="pipeline-stage"><span class="stage-number">01</span><strong>Frame bytes</strong><span>{_value(result, "original_size_bytes", 0)} B + versioned metadata</span></div>
+        <div class="pipeline-stage"><span class="stage-number">02</span><strong>Encode DNA</strong><span>{_value(result, "encoded_nucleotides", 0)} nt · exact 50% GC</span></div>
+        <div class="pipeline-stage"><span class="stage-number">03</span><strong>Simulate reads</strong><span>{_value(result, "fragment_count", 0)} known clusters · {_value(config, "cluster_size", 0)} reads each</span></div>
+        <div class="pipeline-stage"><span class="stage-number">04</span><strong>Reconstruct</strong><span>{html.escape(decoder)} · source-free inference</span></div>
+        <div class="pipeline-stage"><span class="stage-number">05</span><strong>Verify file</strong><span>{html.escape(verification)}</span></div>
+      </div>
+    """)
+
+
+def _learned_selection_markup(fragments: list[Any]) -> str:
+    """Summarize which upstream candidate the learned model selected."""
+    counts = Counter(str(_value(fragment, "selected_method", "unknown")) for fragment in fragments)
+    labels = {
+        "medoid": "medoid",
+        "consensus": "consensus",
+        "unconstrained": "evidence",
+        "constrained": "biology",
+    }
+    return "".join(
+        f'<span class="selection-pill">{html.escape(labels.get(name, name))}: {count}</span>'
+        for name, count in sorted(counts.items())
+    )
+
+
 st.markdown(
     """
     <section class="hero">
-      <div class="eyebrow">DNA data storage · reconstruction sandbox</div>
-      <h1>Recover the signal hidden in noisy DNA reads.</h1>
+      <div class="eyebrow">DNA data storage · file recovery engine</div>
+      <h1>Recover real files from noisy DNA reads.</h1>
       <p>
-        Simulate insertion, deletion, and substitution errors; compare four reconstruction
-        strategies; and test whether biological design rules can serve as a useful decoding prior.
+        Turn bytes into synthesis-aware DNA fragments, simulate insertion, deletion, and
+        substitution errors, reconstruct every fragment, and accept the file only when its
+        SHA-256 integrity check passes.
       </p>
       <div class="scope-strip">
-        <span class="scope-pill">● Controlled synthetic data</span>
-        <span class="scope-pill">● Uncoded IDS channel</span>
-        <span class="scope-pill">● Seeded and reproducible</span>
-        <span class="scope-pill">● Inference-time constraints</span>
+        <span class="scope-pill">● Any small binary file</span>
+        <span class="scope-pill">● 50% GC constrained code</span>
+        <span class="scope-pill">● Learned candidate reranker</span>
+        <span class="scope-pill">● Cryptographic verification</span>
       </div>
     </section>
     """,
@@ -763,72 +887,308 @@ st.markdown(
 
 with st.sidebar:
     st.markdown('<div class="sidebar-brand">🧬 HelixTrace</div>', unsafe_allow_html=True)
+    workspace = st.radio(
+        "Workspace",
+        ("File recovery", "Strand sandbox"),
+        label_visibility="collapsed",
+    )
     st.markdown(
-        '<div class="sidebar-note">Configure one controlled reconstruction experiment. '
-        "Every run is deterministic for the selected seed.</div>",
+        '<div class="sidebar-note">Run a complete recovery or inspect one reconstruction '
+        "experiment. Every result is deterministic for the selected seed.</div>",
         unsafe_allow_html=True,
     )
     st.markdown('<div class="sidebar-rule"></div>', unsafe_allow_html=True)
 
-    with st.form("experiment_controls"):
-        source_input = st.text_area(
-            "Source DNA",
-            value=DEFAULT_SOURCE,
-            height=112,
-            help="Whitespace is removed and bases are converted to uppercase.",
-        )
-        cluster_size = st.slider(
-            "Trace cluster size",
-            min_value=3,
-            max_value=15,
-            value=DEFAULT_CLUSTER_SIZE,
-            step=1,
-        )
-        st.markdown("**IDS event probabilities**")
-        insertion_probability = st.slider(
-            "Insertion",
-            min_value=0.0,
-            max_value=0.2,
-            value=DEFAULT_INSERTION_PROBABILITY,
-            step=0.01,
-            format="%.2f",
-        )
-        deletion_probability = st.slider(
-            "Deletion",
-            min_value=0.0,
-            max_value=0.2,
-            value=DEFAULT_DELETION_PROBABILITY,
-            step=0.01,
-            format="%.2f",
-        )
-        substitution_probability = st.slider(
-            "Substitution",
-            min_value=0.0,
-            max_value=0.2,
-            value=DEFAULT_SUBSTITUTION_PROBABILITY,
-            step=0.01,
-            format="%.2f",
-        )
-        seed = st.number_input("Random seed", min_value=0, max_value=1_000_000, value=DEFAULT_SEED)
+    if workspace == "File recovery":
+        decoder_labels = {
+            "Learned candidate reranker": "learned",
+            "Alignment consensus · fast": "consensus",
+            "Evidence-only refinement": "evidence",
+            "Biology-aware refinement": "biology",
+            "Observed medoid · baseline": "medoid",
+        }
+        with st.form("file_controls"):
+            uploaded_file = st.file_uploader(
+                "Small file to recover",
+                help=f"Any file type, up to {MAX_INTERACTIVE_FILE_BYTES} bytes in this demo.",
+                max_upload_size=1,
+            )
+            st.caption(f"No upload? The built-in {DEFAULT_FILE_NAME} sample will be used.")
+            decoder_label = st.selectbox("Decoder", tuple(decoder_labels))
+            file_cluster_size = st.slider(
+                "Reads per fragment",
+                min_value=3,
+                max_value=15,
+                value=11,
+                step=1,
+            )
+            file_error_probability = st.slider(
+                "Probability per IDS event",
+                min_value=0.0,
+                max_value=0.05,
+                value=0.01,
+                step=0.005,
+                format="%.3f",
+            )
+            file_seed = st.number_input(
+                "Random seed",
+                min_value=0,
+                max_value=1_000_000,
+                value=DEFAULT_FILE_SEED,
+                key="file_seed",
+            )
+            file_submitted = st.form_submit_button(
+                "Encode, simulate & recover",
+                use_container_width=True,
+            )
+    else:
+        with st.form("experiment_controls"):
+            source_input = st.text_area(
+                "Source DNA",
+                value=DEFAULT_SOURCE,
+                height=112,
+                help="Whitespace is removed and bases are converted to uppercase.",
+            )
+            cluster_size = st.slider(
+                "Trace cluster size",
+                min_value=3,
+                max_value=15,
+                value=DEFAULT_CLUSTER_SIZE,
+                step=1,
+            )
+            st.markdown("**IDS event probabilities**")
+            insertion_probability = st.slider(
+                "Insertion",
+                min_value=0.0,
+                max_value=0.2,
+                value=DEFAULT_INSERTION_PROBABILITY,
+                step=0.01,
+                format="%.2f",
+            )
+            deletion_probability = st.slider(
+                "Deletion",
+                min_value=0.0,
+                max_value=0.2,
+                value=DEFAULT_DELETION_PROBABILITY,
+                step=0.01,
+                format="%.2f",
+            )
+            substitution_probability = st.slider(
+                "Substitution",
+                min_value=0.0,
+                max_value=0.2,
+                value=DEFAULT_SUBSTITUTION_PROBABILITY,
+                step=0.01,
+                format="%.2f",
+            )
+            seed = st.number_input(
+                "Random seed", min_value=0, max_value=1_000_000, value=DEFAULT_SEED
+            )
 
-        st.markdown("**Biological prior weights**")
-        lambda_gc = st.slider(
-            "GC-content weight (λGC)",
-            min_value=0.0,
-            max_value=5.0,
-            value=DEFAULT_LAMBDA_GC,
-            step=0.1,
-            format="%.1f",
+            st.markdown("**Biological prior weights**")
+            lambda_gc = st.slider(
+                "GC-content weight (λGC)",
+                min_value=0.0,
+                max_value=5.0,
+                value=DEFAULT_LAMBDA_GC,
+                step=0.1,
+                format="%.1f",
+            )
+            lambda_homopolymer = st.slider(
+                "Homopolymer weight (λHP)",
+                min_value=0.0,
+                max_value=5.0,
+                value=DEFAULT_LAMBDA_HOMOPOLYMER,
+                step=0.1,
+                format="%.1f",
+            )
+            submitted = st.form_submit_button("Run experiment", use_container_width=True)
+
+
+if workspace == "File recovery":
+    if uploaded_file is None:
+        file_data = DEFAULT_FILE_DATA
+        file_name = DEFAULT_FILE_NAME
+        file_media_type = DEFAULT_FILE_MEDIA_TYPE
+    else:
+        file_data = uploaded_file.getvalue()
+        file_name = uploaded_file.name or "recovered-file.bin"
+        file_media_type = uploaded_file.type or "application/octet-stream"
+
+    selected_decoder = decoder_labels[decoder_label]
+    file_run_signature = (
+        hashlib.sha256(file_data).hexdigest(),
+        file_name,
+        file_media_type,
+        selected_decoder,
+        int(file_cluster_size),
+        float(file_error_probability),
+        int(file_seed),
+    )
+
+    st.markdown('<div class="section-kicker">End-to-end recovery</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section-title">From file bytes to verified bytes again</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        '<div class="section-copy">The decoder sees only noisy read clusters. The original is retained solely to score this controlled simulation after reconstruction.</div>',
+        unsafe_allow_html=True,
+    )
+
+    if len(file_data) > MAX_INTERACTIVE_FILE_BYTES:
+        st.error(
+            f"This free interactive demo accepts up to {MAX_INTERACTIVE_FILE_BYTES} bytes; "
+            f"the selected file contains {len(file_data)} bytes. Choose a smaller proof file."
         )
-        lambda_homopolymer = st.slider(
-            "Homopolymer weight (λHP)",
-            min_value=0.0,
-            max_value=5.0,
-            value=DEFAULT_LAMBDA_HOMOPOLYMER,
-            step=0.1,
-            format="%.1f",
+        st.stop()
+
+    if file_submitted:
+        file_configuration = {
+            "fragment_bases": 40 if selected_decoder == "learned" else 64,
+            "cluster_size": int(file_cluster_size),
+            "insertion_probability": float(file_error_probability),
+            "deletion_probability": float(file_error_probability),
+            "substitution_probability": float(file_error_probability),
+            "seed": int(file_seed),
+            "decoder": selected_decoder,
+            "local_search_steps": 1,
+        }
+        file_result = _run_file_configuration(
+            file_data,
+            file_name,
+            file_media_type,
+            file_configuration,
         )
-        submitted = st.form_submit_button("Run experiment", use_container_width=True)
+        if file_result is not None:
+            st.session_state["file_recovery_result"] = file_result
+            st.session_state["file_recovery_signature"] = file_run_signature
+
+    file_result = (
+        st.session_state.get("file_recovery_result")
+        if st.session_state.get("file_recovery_signature") == file_run_signature
+        else None
+    )
+    if file_result is None:
+        st.markdown(
+            """
+            **What will happen when you run it**
+
+            1. A versioned frame stores the file bytes, metadata, and SHA-256 digest.
+            2. A reversible constrained code emits exactly 50% GC DNA with no adjacent repeats.
+            3. Each fragment produces a cluster of synthetic reads with IDS errors.
+            4. The selected source-free decoder reconstructs every fragment.
+            5. A download appears only if the decoded file passes its embedded SHA-256 check.
+            """
+        )
+        st.info("Use the built-in proof file or upload a small file, then start the recovery.")
+        st.stop()
+
+    file_fragments = list(_value(file_result, "fragments", []))
+    file_config = _value(file_result, "config")
+    exact_fragments = int(_value(file_result, "exact_fragment_count", 0))
+    fragment_count = int(_value(file_result, "fragment_count", len(file_fragments)))
+    st.markdown(_file_pipeline_markup(file_result), unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div class="kpi-grid">
+          <div class="kpi"><div class="kpi-label">Input</div><div class="kpi-value">{_value(file_result, "original_size_bytes", 0)} B</div></div>
+          <div class="kpi"><div class="kpi-label">DNA payload</div><div class="kpi-value">{_value(file_result, "encoded_nucleotides", 0)} nt</div></div>
+          <div class="kpi"><div class="kpi-label">Exact fragments</div><div class="kpi-value">{exact_fragments}/{fragment_count}</div></div>
+          <div class="kpi"><div class="kpi-label">Total reads</div><div class="kpi-value">{fragment_count * int(_value(file_config, "cluster_size", 0))}</div></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    checksum_verified = bool(_value(file_result, "checksum_verified", False))
+    integrity_class = "integrity-panel" if checksum_verified else "integrity-panel failed"
+    integrity_title = "✓ Exact file recovered" if checksum_verified else "✕ Corruption detected"
+    integrity_copy = (
+        "The reconstructed bytes match the digest stored before the noisy channel."
+        if checksum_verified
+        else "At least one fragment remained wrong, so HelixTrace refused to expose an unverified download."
+    )
+    st.markdown(
+        f"""
+        <div class="{integrity_class}">
+          <strong>{integrity_title}</strong>
+          <p style="color:#405d56; margin:0.35rem 0 0.55rem; font-size:0.82rem;">{integrity_copy}</p>
+          <div class="hash-value">SHA-256 · {html.escape(str(_value(file_result, "original_sha256", "—")))}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    if str(_value(file_config, "decoder", "")) == "learned":
+        st.markdown("**Learned selector decisions across fragments**")
+        st.markdown(_learned_selection_markup(file_fragments), unsafe_allow_html=True)
+        agreement_count = sum(
+            _value(fragment, "candidate_variants") == 1 for fragment in file_fragments
+        )
+        st.caption(
+            "helixtrace-linear-reranker-v1 · trained on 80 synthetic experiments; evaluated "
+            "on a separate 120-experiment seed split. It selects among four upstream candidates. "
+            f"All candidates agreed on {agreement_count}/{fragment_count} fragments in this run; "
+            "identical-candidate ties use a deterministic method label."
+        )
+
+    if checksum_verified and _value(file_result, "recovered_data") is not None:
+        st.download_button(
+            "Download verified recovered file",
+            data=_value(file_result, "recovered_data"),
+            file_name=str(_value(file_result, "recovered_filename", file_name) or file_name),
+            mime=str(
+                _value(file_result, "recovered_media_type", file_media_type) or file_media_type
+            ),
+            type="primary",
+            use_container_width=True,
+        )
+    elif recovery_error := _value(file_result, "error"):
+        st.warning(str(recovery_error))
+        st.caption("Try more reads, a lower error rate, or a different deterministic seed.")
+
+    if file_fragments:
+        st.markdown('<div class="section-kicker">Read-level evidence</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="section-title">Open one reconstructed fragment</div>',
+            unsafe_allow_html=True,
+        )
+        inspected_index = st.selectbox(
+            "Fragment",
+            range(len(file_fragments)),
+            format_func=lambda index: f"Fragment {index + 1} of {len(file_fragments)}",
+        )
+        inspected = file_fragments[int(inspected_index)]
+        inspected_traces = list(_value(inspected, "traces", []))
+        source_column, read_column, recovered_column = st.columns(3)
+        with source_column:
+            st.caption("Synthetic ground truth · evaluation only")
+            st.code(str(_value(inspected, "source", "")), language=None)
+        with read_column:
+            st.caption("One noisy observed read")
+            st.code(str(inspected_traces[0] if inspected_traces else ""), language=None)
+        with recovered_column:
+            st.caption(f"Recovered · {_value(inspected, 'selected_method', 'decoder')}")
+            st.code(str(_value(inspected, "reconstructed", "")), language=None)
+
+    with st.expander("Scientific scope and production gaps"):
+        st.markdown(
+            """
+            - **Synthetic channel:** the reads are simulated locally; this release is not validated on nanopore data.
+            - **Known clusters and order:** fragment identity, orientation, and ordering are supplied out of band. Demultiplexing and clustering are separate unsolved layers here.
+            - **No error-correcting code:** multiple reads provide reconstruction evidence; SHA-256 detects remaining corruption but cannot repair it.
+            - **Constrained encoder:** the default reversible code guarantees 50% GC and homopolymer length one at a density of 1 bit/nt, before primers or addressing overhead.
+            - **Small learned model:** the ridge reranker selects among four deterministic candidates. Held-out exact recovery did not improve over the strongest fixed candidate, while mean NED improved by 0.33% (one edit across 120 experiments).
+            - **Prototype scale:** the UI intentionally caps files at 256 bytes. Movies and large images are the long-term application, not a capability claimed by this demo.
+            """
+        )
+
+    st.markdown(
+        '<div class="footer-note">HelixTrace · Verified, source-free reconstruction for controlled DNA-storage experiments</div>',
+        unsafe_allow_html=True,
+    )
+    st.stop()
 
 
 source = _clean_sequence(source_input)

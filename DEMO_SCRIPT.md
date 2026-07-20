@@ -1,59 +1,48 @@
-# HelixTrace — 2:30 Demo Script
+# HelixTrace demo video
 
-**Target runtime:** 2 minutes 30 seconds
+**Target length:** 2:10–2:25<br>
+**Audio:** Álvaro's natural voice; no synthetic narration and no copyrighted music<br>
+**Visual style:** real product interaction, visible cursor, short zooms, almost no title cards
 
-**Format:** screen recording with continuous English voiceover
+## Recording setup
 
-**Required prepared tabs:** HelixTrace app, README benchmark table, and the main Codex build task
+- Open the public app in **File recovery** mode at 1920×1080.
+- Leave the built-in `proof.txt` selected, with the learned reranker, 11 reads, 0.010 error,
+  and seed 43.
+- Keep the local README and a clean terminal crop of the passing checks ready off-screen.
+- Record one continuous product flow, then remove waits and add gentle crop/zoom motion in editing.
+- Do not show API keys, personal notifications, browser bookmarks, or unrelated tabs.
 
-## Timed script
+## Timed shot list and narration
 
-| Time | Screen action | Voiceover |
+| Time | What the viewer sees | Álvaro says |
 |---|---|---|
-| **0:00–0:13** | Start on the HelixTrace hero. Keep the title and scope pills visible. | “This is HelixTrace: biology-aware reconstruction for noisy DNA storage. It is an educational lab for seeing how multiple corrupted DNA reads can be turned back into one candidate strand.” |
-| **0:13–0:32** | Point to the insertion, deletion, and substitution controls, cluster size, and seed. Do not change the defaults yet. | “DNA reads can contain substitutions, but also insertions and deletions that shift every later position. Here I can control all three event probabilities, the number of reads, and a random seed, so every experiment is reproducible.” |
-| **0:32–0:53** | Select **Run experiment**, then scroll to the source panel and the four reconstruction cards. | “The source is visible for evaluation, but the reconstruction methods receive only the noisy traces. HelixTrace compares an observed medoid, alignment-aware consensus, evidence-only local search, and biology-aware search using the same local-search budget.” |
-| **0:53–1:19** | Pause over the method cards, then show **Sequence similarity** and open **Method comparison**. Highlight exact recovery, NED, GC, max run, validity, and evidence cost. | “The final method adds soft penalties for GC outside forty-five to fifty-five percent and homopolymer runs longer than three. This is deterministic inference-time search, not a trained neural model. The table exposes both sides of the decision: distance from the hidden source, agreement with the reads, and whether the candidate satisfies the biological design assumptions.” |
-| **1:19–1:43** | Switch to the README benchmark table. Highlight the two compliant rows first, then the negative-control rows. | “Across one hundred twenty compliant synthetic experiments, evidence-only and constrained search both recovered exactly thirty-two point five percent. Valid outputs rose from eighty-five to one hundred percent, while mean normalized edit distance stayed almost unchanged. But the negative control matters: when the true strand violates the GC prior, constrained exact recovery drops from fifty-five percent to zero. The prior helps only when its assumption is valid.” |
-| **1:43–2:06** | Select **Generate free guided interpretation**, show its evidence and reliability warning, then switch to the main Codex build task. | “The complete public lab, including this guided experiment story, runs locally without an account, key, credits, or paid service. GPT-5.6 Sol was used through Codex throughout Build Week to audit the scaffold, design and implement the pipeline, challenge scientific assumptions, test edge cases, build the interface, and prepare this submission.” |
-| **2:06–2:22** | Show a passing test result or the README Build Week table, with no secrets visible. | “The repository separates the pre-existing simulator from the Build Week extension, and the Codex feedback Session ID provides development evidence. An optional Responses API analyst remains in the code, but it is not required for the product and I am not claiming a live API call.” |
-| **2:22–2:30** | Return to the HelixTrace hero or the four-method comparison. End on the product name. | “HelixTrace turns a difficult bioinformatics trade-off into an experiment a student can run, inspect, question, and reproduce.” |
+| **0:00–0:08** | Cold open: cursor moves from `proof.txt` to **Encode, simulate & recover**. Do not begin with a static logo card. | “What if a file could survive being converted into DNA, copied with errors, and read back correctly?” |
+| **0:08–0:20** | Quick zoom across the hero pills: constrained code, learned reranker, cryptographic verification. | “This is HelixTrace. It takes real bytes, encodes them as synthesis-aware DNA fragments, reconstructs noisy reads, and only returns a file if its hash is correct.” |
+| **0:20–0:31** | Click **Encode, simulate & recover**. Keep the cursor visible; compress the processing wait in the edit. | “I am using the learned decoder, eleven reads per fragment, and one percent each for insertion, deletion, and substitution errors.” |
+| **0:31–0:48** | Scroll through the five moving stages and KPIs: 5 bytes, 848 nt, 22/22 fragments, 242 reads. | “The file becomes a versioned frame with SHA-256, then a reversible one-bit-per-nucleotide code. It guarantees exactly fifty percent GC and no adjacent repeated bases.” |
+| **0:48–1:02** | Land on **Exact file recovered**, the hash, and the enabled download button. Briefly click or hover the download button; do not open a file picker. | “Every fragment was reconstructed from the noisy clusters, the decoded bytes matched the embedded digest, and only then did HelixTrace enable the download.” |
+| **1:02–1:18** | Select **Fragment 4**, then zoom between synthetic ground truth, its 41-base noisy read, and the recovered 40-base sequence. | “Here is the actual evidence. The middle read contains an extra base, while the recovered fragment matches the hidden source. The reconstruction function never receives that source or the expected hash.” |
+| **1:18–1:36** | Show the learned-selector caption, then a clean crop of the held-out metrics in the README. | “The machine-learning component is a small ridge reranker trained on eighty synthetic experiments and tested on a separate one-hundred-twenty experiment seed split. It reduced mean normalized edit distance by eleven point six percent versus consensus, but only zero point three three percent versus the strongest fixed method, with no exact-recovery gain. I report that small result honestly.” |
+| **1:36–1:50** | Fast cut to the file benchmark table: 11 reads/1% = 12/12; 7 reads/2% = 2/12. | “The end-to-end benchmark shows the expected reliability curve: twelve of twelve files recovered at eleven reads and one percent errors, but only two of twelve at seven reads and two percent errors.” |
+| **1:50–2:06** | Switch to the local README repository map, then a clean terminal crop showing `151 passed` and the lint result. Keep browser chrome and third-party logos out of frame. | “I built this with Codex powered by GPT-5.6 Sol. Codex helped me turn my research notes into the architecture, implement the codec and reconstruction pipeline, train the reranker, challenge the scientific claims, and verify one hundred fifty-one tests and the live interface.” |
+| **2:06–2:22** | Return to the app and open **Scientific scope and production gaps**. End on the product hero. | “This is still a controlled synthetic prototype: clusters and fragment order are known, and it has no wet-lab validation or error-correcting code. The next step is real nanopore data and a neural reconstructor. But today, HelixTrace already completes the full file-to-DNA-to-file loop.” |
 
-## Recording checklist
+## Editing notes
 
-### Before recording
+- Keep cuts every 3–7 seconds, driven by cursor movement or a result changing on screen.
+- Use only two minimal overlays: `FILE → DNA → NOISY READS → VERIFIED FILE` and the held-out
+  comparison. Everything else should be the real app or repository.
+- Speed up the six-second learned run rather than covering it with a presentation slide.
+- Preserve readable text; zoom into one area instead of shrinking the whole desktop.
+- Use a subtle click sound only if it is original or licensed. Silence is preferable to stock music.
+- Export at 1080p, H.264 video + AAC audio, and verify the final duration is below three minutes.
 
-- [ ] Start the app with `streamlit run app.py` and confirm the full page loads without errors.
-- [ ] Start from an environment with no `OPENAI_API_KEY` and confirm the complete public workflow
-      works without an account, key, credits, or payment.
-- [ ] Keep the default run ready: 7 traces; insertion, deletion, and substitution at 0.06; seed
-      42; GC and homopolymer weights at 1.0.
-- [ ] Confirm the method cards and comparison table fit at the chosen browser zoom. Use roughly
-      80–90% zoom if needed, but keep text readable at 1080p.
-- [ ] Open the README directly at the aggregate benchmark table.
-- [ ] Open the main Codex task at a clean plan or test-results view. Hide unrelated tasks,
-      notifications, personal filenames, email addresses, and secrets.
-- [ ] Close noisy browser tabs and disable desktop notifications.
-- [ ] Rehearse the exact scrolling path once. Aim for 2:25–2:35 and never exceed 3:00.
+## Final compliance check
 
-### During recording
-
-- [ ] Record at 1080p or higher with a clear microphone and English voiceover.
-- [ ] Keep the cursor slow and intentional; pause on every metric you name.
-- [ ] Show the project working, not only slides or source code.
-- [ ] Generate the free guided interpretation and show its evidence and reliability warning.
-- [ ] Show that GPT-5.6 Sol was used through the main Codex development task; do not imply that the
-      optional Responses integration made a live call.
-- [ ] State that the biological method is inference-time local search, not neural training.
-- [ ] State the negative-control result; do not imply state-of-the-art or real-read performance.
-- [ ] Explicitly explain how Codex was used and show the main Codex build task.
-
-### After recording
-
-- [ ] Trim loading silence only; do not edit the sequence of actions in a misleading way.
-- [ ] Check that the final video is under 3 minutes and that all text is legible.
-- [ ] Watch once with audio and once muted to confirm both narration and screen story work.
-- [ ] Upload to YouTube with visibility set to **Public**.
-- [ ] Add the live demo URL, GitHub URL, YouTube URL, and Codex `/feedback` Session ID to
-      `SUBMISSION.md` and the final Devpost form.
-- [ ] Verify the public video and repository links in a logged-out/private browser window.
+- [ ] Public YouTube visibility.
+- [ ] Clear audio in English with Álvaro's own voice.
+- [ ] Real demo matches the deployed build.
+- [ ] Codex and GPT-5.6 use explained aloud.
+- [ ] No third-party music, trademarks used as decoration, secrets, or personal notifications.
+- [ ] Final video remains under three minutes.
