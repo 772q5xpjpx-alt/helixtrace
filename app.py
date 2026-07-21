@@ -54,6 +54,8 @@ st.markdown(
         --mint: #0d7c66;
         --mint-dark: #075748;
         --mint-soft: #dff3eb;
+        --mint-bright: #82e4c0;
+        --night: #082a24;
         --coral: #e87758;
         --amber: #d69a2d;
         --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -62,6 +64,10 @@ st.markdown(
 
       html, body, [class*="css"] {
         font-family: var(--font-sans);
+      }
+
+      html, body {
+        overflow-x: hidden;
       }
 
       [data-testid="stAppViewContainer"] {
@@ -134,6 +140,18 @@ st.markdown(
 
       [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] {
         background: #f8fbf9;
+        align-items: center;
+        gap: 0.55rem;
+        min-height: 0;
+        padding: 0.72rem !important;
+      }
+
+      [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"]::after {
+        content: "or drop a file here";
+        color: #526a64;
+        font-size: 0.7rem;
+        font-weight: 700;
+        line-height: 1.25;
       }
 
       [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button {
@@ -167,6 +185,34 @@ st.markdown(
         color: #102f29;
       }
 
+      [data-testid="stSidebar"] .stButton > button *,
+      [data-testid="stSidebar"] .stFormSubmitButton > button * {
+        color: #16332d !important;
+      }
+
+      [data-testid="stMain"] [data-testid="stBaseButton-primary"],
+      [data-testid="stMain"] [data-testid="stDownloadButton"] button {
+        min-height: 3rem;
+        border: 1px solid var(--mint-dark);
+        border-radius: 11px;
+        background: linear-gradient(135deg, var(--mint), var(--mint-dark));
+        color: #f7fffc !important;
+        font-weight: 800;
+        box-shadow: 0 10px 28px rgba(7, 87, 72, 0.2);
+        transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+      }
+
+      [data-testid="stMain"] [data-testid="stBaseButton-primary"] *,
+      [data-testid="stMain"] [data-testid="stDownloadButton"] button * {
+        color: #f7fffc !important;
+      }
+
+      [data-testid="stMain"] [data-testid="stBaseButton-primary"]:focus-visible,
+      [data-testid="stMain"] [data-testid="stDownloadButton"] button:focus-visible {
+        outline: 3px solid rgba(13, 124, 102, 0.3);
+        outline-offset: 3px;
+      }
+
       .block-container {
         max-width: 1240px;
         padding-top: 2rem;
@@ -174,31 +220,63 @@ st.markdown(
       }
 
       .hero {
-        border: 1px solid var(--line);
-        border-radius: 24px;
-        padding: clamp(1.5rem, 4vw, 3.2rem);
+        border: 1px solid rgba(130, 228, 192, 0.2);
+        border-radius: 26px;
+        padding: clamp(1.5rem, 4vw, 3rem);
         background:
-          linear-gradient(120deg, rgba(255, 255, 255, 0.96), rgba(239, 248, 242, 0.9));
-        box-shadow: 0 20px 55px rgba(25, 57, 50, 0.08);
+          radial-gradient(circle at 76% 18%, rgba(130, 228, 192, 0.18), transparent 18rem),
+          linear-gradient(135deg, #0b3029 0%, var(--night) 62%, #061e1a 100%);
+        box-shadow: 0 24px 65px rgba(8, 42, 36, 0.19);
         overflow: hidden;
         position: relative;
+        isolation: isolate;
         margin-bottom: 1.45rem;
       }
 
-      .hero::after {
-        content: "ACGT · ACGT · ACGT";
+      .hero::before {
+        content: "";
         position: absolute;
-        right: -1rem;
-        bottom: -0.55rem;
-        font: 500 clamp(1.7rem, 5vw, 4.8rem)/1 var(--font-mono);
-        color: rgba(13, 124, 102, 0.065);
-        letter-spacing: 0.05em;
+        inset: 0;
+        z-index: -1;
+        background-image:
+          linear-gradient(rgba(130, 228, 192, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(130, 228, 192, 0.045) 1px, transparent 1px);
+        background-size: 34px 34px;
+        mask-image: linear-gradient(90deg, transparent 0%, black 42%, black 100%);
+      }
+
+      .hero::after {
+        content: "ACGT  CAGT  TGCA  GTAC";
+        position: absolute;
+        left: -2rem;
+        bottom: -0.68rem;
+        z-index: -1;
+        font: 600 clamp(1.7rem, 5vw, 4.9rem)/1 var(--font-mono);
+        color: rgba(130, 228, 192, 0.055);
+        letter-spacing: 0.08em;
         white-space: nowrap;
         pointer-events: none;
+        animation: dna-drift 18s ease-in-out infinite alternate;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.16fr) minmax(300px, 0.84fr);
+        align-items: center;
+        gap: clamp(1.4rem, 4vw, 3.4rem);
+      }
+
+      .hero-copy,
+      .hero-instrument {
+        position: relative;
+        z-index: 1;
       }
 
       .eyebrow {
-        color: var(--mint);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        color: var(--mint-bright);
         font-size: 0.72rem;
         font-weight: 800;
         letter-spacing: 0.13em;
@@ -206,20 +284,27 @@ st.markdown(
         margin-bottom: 0.8rem;
       }
 
+      .eyebrow::before {
+        content: "";
+        width: 1.9rem;
+        height: 1px;
+        background: currentColor;
+      }
+
       .hero h1 {
-        color: var(--ink);
-        font-size: clamp(2.15rem, 5vw, 4.45rem);
-        line-height: 0.98;
+        color: #f4fbf8;
+        font-size: clamp(2.15rem, 4.8vw, 4.25rem);
+        line-height: 1;
         letter-spacing: -0.055em;
-        max-width: 860px;
+        max-width: 720px;
         margin: 0 0 1rem;
       }
 
       .hero p {
-        color: var(--muted);
-        font-size: 1.05rem;
-        line-height: 1.65;
-        max-width: 760px;
+        color: #c7ddd6;
+        font-size: 1rem;
+        line-height: 1.62;
+        max-width: 680px;
         margin: 0;
       }
 
@@ -234,13 +319,130 @@ st.markdown(
         display: inline-flex;
         align-items: center;
         gap: 0.42rem;
-        border: 1px solid rgba(13, 124, 102, 0.18);
+        border: 1px solid rgba(130, 228, 192, 0.2);
         border-radius: 999px;
         padding: 0.4rem 0.72rem;
-        color: var(--mint-dark);
-        background: rgba(223, 243, 235, 0.68);
+        color: #d8eee7;
+        background: rgba(255, 255, 255, 0.055);
         font-size: 0.77rem;
         font-weight: 700;
+      }
+
+      .scope-dot {
+        color: var(--mint-bright);
+        font-size: 0.62rem;
+      }
+
+      .hero-instrument {
+        border: 1px solid rgba(207, 241, 229, 0.19);
+        border-radius: 19px;
+        padding: 1rem;
+        background: rgba(2, 24, 20, 0.58);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 18px 44px rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(10px);
+      }
+
+      .instrument-head,
+      .instrument-foot {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.8rem;
+        color: #a9c8bf;
+        font: 650 0.66rem/1.2 var(--font-mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .instrument-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.38rem;
+        color: #bfe9da;
+      }
+
+      .instrument-status::before {
+        content: "";
+        width: 0.42rem;
+        height: 0.42rem;
+        border-radius: 50%;
+        background: var(--mint-bright);
+        box-shadow: 0 0 0 4px rgba(130, 228, 192, 0.1);
+      }
+
+      .readback-stack {
+        display: grid;
+        gap: 0.58rem;
+        margin: 1rem 0;
+      }
+
+      .readback-row {
+        display: grid;
+        grid-template-columns: 3.3rem minmax(0, 1fr);
+        align-items: center;
+        gap: 0.65rem;
+      }
+
+      .readback-label {
+        color: #789e93;
+        font: 600 0.62rem/1 var(--font-mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .base-stream {
+        display: flex;
+        gap: 0.28rem;
+        min-width: 0;
+      }
+
+      .base {
+        display: inline-grid;
+        place-items: center;
+        width: clamp(1.35rem, 3.2vw, 1.8rem);
+        height: clamp(1.35rem, 3.2vw, 1.8rem);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 6px;
+        color: #d9eee7;
+        background: rgba(255, 255, 255, 0.055);
+        font: 650 0.68rem/1 var(--font-mono);
+      }
+
+      .base-error {
+        color: #ffd5c8;
+        border-color: rgba(232, 119, 88, 0.5);
+        background: rgba(232, 119, 88, 0.16);
+      }
+
+      .base-recovered {
+        color: #dffff3;
+        border-color: rgba(130, 228, 192, 0.35);
+        background: rgba(130, 228, 192, 0.12);
+      }
+
+      .verification-line {
+        position: relative;
+        height: 3px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        margin: 0.95rem 0;
+      }
+
+      .verification-line::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        width: 42%;
+        background: linear-gradient(90deg, transparent, var(--mint-bright), transparent);
+        animation: verify-scan 3.8s ease-in-out infinite;
+      }
+
+      .instrument-verdict {
+        color: var(--mint-bright);
+        font-weight: 800;
       }
 
       .vision-grid {
@@ -256,6 +458,7 @@ st.markdown(
         padding: 1.2rem 1.3rem;
         background: rgba(255, 255, 255, 0.75);
         box-shadow: 0 10px 30px rgba(25, 57, 50, 0.05);
+        transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
       }
 
       .vision-card.accent {
@@ -408,6 +611,7 @@ st.markdown(
         border-radius: 14px;
         padding: 0.9rem 1rem;
         background: rgba(255, 255, 255, 0.68);
+        transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
       }
 
       .kpi-label {
@@ -426,11 +630,21 @@ st.markdown(
         margin-top: 0.22rem;
       }
 
-      .pipeline-flow {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 0.62rem;
-        margin: 1rem 0;
+      [data-testid="stMain"] ol.pipeline-flow {
+        display: grid !important;
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+        align-items: stretch;
+        gap: 0.62rem !important;
+        width: 100%;
+        margin: 1rem 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+      }
+
+      [data-testid="stMain"] ol.pipeline-flow > li.pipeline-stage {
+        display: block;
+        margin: 0 !important;
+        list-style: none !important;
       }
 
       .pipeline-stage {
@@ -439,6 +653,17 @@ st.markdown(
         padding: 0.85rem;
         background: rgba(255, 255, 255, 0.75);
         min-height: 105px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+      }
+
+      .pipeline-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 3px;
+        background: linear-gradient(180deg, var(--mint), rgba(13, 124, 102, 0.12));
       }
 
       .pipeline-stage strong {
@@ -459,17 +684,149 @@ st.markdown(
         font: 700 0.65rem/1 var(--font-mono) !important;
       }
 
+      .pipeline-shell {
+        border: 1px solid rgba(13, 124, 102, 0.18);
+        border-radius: 20px;
+        padding: 1.05rem;
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.88), rgba(233, 246, 239, 0.68));
+        box-shadow: 0 12px 34px rgba(25, 57, 50, 0.06);
+        margin-top: 0.95rem;
+      }
+
+      .pipeline-shell-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+      }
+
+      .pipeline-shell-title {
+        color: var(--ink);
+        font-size: 0.86rem;
+        font-weight: 800;
+        letter-spacing: -0.015em;
+      }
+
+      .pipeline-ready {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border: 1px solid rgba(13, 124, 102, 0.18);
+        border-radius: 999px;
+        padding: 0.3rem 0.55rem;
+        color: var(--mint-dark);
+        background: rgba(223, 243, 235, 0.72);
+        font: 750 0.62rem/1 var(--font-mono);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .pipeline-ready::before {
+        content: "";
+        width: 0.38rem;
+        height: 0.38rem;
+        border-radius: 50%;
+        background: var(--mint);
+      }
+
+      .pipeline-preview .pipeline-stage {
+        min-height: 126px;
+        background: rgba(255, 255, 255, 0.74);
+      }
+
+      .stage-state {
+        display: inline-flex;
+        margin-top: 0.58rem;
+        border-radius: 999px;
+        padding: 0.27rem 0.44rem;
+        color: #56716a !important;
+        background: #edf3ef;
+        font: 700 0.58rem/1 var(--font-mono) !important;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .run-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.72rem;
+        border-left: 3px solid var(--amber);
+        border-radius: 0 12px 12px 0;
+        padding: 0.85rem 1rem;
+        color: #425953;
+        background: rgba(255, 248, 232, 0.75);
+        font-size: 0.79rem;
+        line-height: 1.5;
+      }
+
+      .run-note strong {
+        display: block;
+        color: var(--ink);
+        margin-bottom: 0.12rem;
+      }
+
       .integrity-panel {
         border: 1px solid rgba(13, 124, 102, 0.28);
         border-radius: 18px;
-        padding: 1.1rem 1.25rem;
+        padding: 1.25rem 1.35rem;
         background: linear-gradient(115deg, #e3f6ee, rgba(255,255,255,0.92));
-        margin: 1rem 0;
+        box-shadow: 0 14px 34px rgba(13, 124, 102, 0.09);
+        margin: 1rem 0 0.7rem;
       }
 
       .integrity-panel.failed {
         border-color: rgba(232, 119, 88, 0.38);
         background: linear-gradient(115deg, #fae9e3, rgba(255,255,255,0.92));
+        box-shadow: 0 14px 34px rgba(166, 76, 61, 0.08);
+      }
+
+      .integrity-topline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        margin-bottom: 0.42rem;
+      }
+
+      .integrity-label {
+        color: var(--mint-dark);
+        font: 800 0.64rem/1 var(--font-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .integrity-panel.failed .integrity-label {
+        color: #984b3d;
+      }
+
+      .integrity-gate {
+        border-radius: 999px;
+        padding: 0.32rem 0.55rem;
+        color: #075748;
+        background: rgba(13, 124, 102, 0.11);
+        font: 750 0.61rem/1 var(--font-mono);
+        text-transform: uppercase;
+      }
+
+      .integrity-panel.failed .integrity-gate {
+        color: #8f493d;
+        background: rgba(232, 119, 88, 0.13);
+      }
+
+      .integrity-title {
+        color: var(--ink);
+        font-size: clamp(1.35rem, 3vw, 1.82rem);
+        font-weight: 850;
+        letter-spacing: -0.035em;
+        line-height: 1.08;
+      }
+
+      .integrity-copy {
+        color: #405d56;
+        margin: 0.48rem 0 0.72rem;
+        font-size: 0.84rem;
+        line-height: 1.5;
       }
 
       .hash-value {
@@ -715,18 +1072,81 @@ st.markdown(
         padding-top: 2rem;
       }
 
-      @media (max-width: 900px) {
+      @keyframes dna-drift {
+        from { transform: translate3d(-0.8rem, 0, 0); }
+        to { transform: translate3d(1.4rem, 0, 0); }
+      }
+
+      @keyframes verify-scan {
+        0% { transform: translateX(-120%); opacity: 0; }
+        18% { opacity: 1; }
+        82% { opacity: 1; }
+        100% { transform: translateX(330%); opacity: 0; }
+      }
+
+      @media (hover: hover) {
+        .vision-card:hover,
+        .pipeline-stage:hover,
+        .kpi:hover {
+          transform: translateY(-3px);
+          border-color: rgba(13, 124, 102, 0.28);
+          box-shadow: 0 15px 34px rgba(25, 57, 50, 0.09);
+        }
+
+        [data-testid="stMain"] [data-testid="stBaseButton-primary"]:hover,
+        [data-testid="stMain"] [data-testid="stDownloadButton"] button:hover {
+          transform: translateY(-1px);
+          filter: brightness(1.05);
+          box-shadow: 0 13px 32px rgba(7, 87, 72, 0.27);
+        }
+      }
+
+      @media (max-width: 1240px) {
         .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .pipeline-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        [data-testid="stMain"] ol.pipeline-flow { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
         .vision-grid { grid-template-columns: 1fr; }
+        .hero-grid { grid-template-columns: 1fr; }
+        .hero-instrument { max-width: 620px; }
         .quality-row { grid-template-columns: 110px 1fr 42px; }
       }
 
       @media (max-width: 620px) {
         .block-container { padding-left: 1rem; padding-right: 1rem; }
+        .hero { padding: 1.35rem; border-radius: 18px; }
+        .hero h1 { font-size: 2rem; line-height: 1.02; }
+        .hero p { font-size: 0.94rem; line-height: 1.5; }
+        .scope-pill { font-size: 0.69rem; }
+        .hero-instrument { padding: 0.8rem; }
+        .readback-row { grid-template-columns: 3.55rem minmax(0, 1fr); gap: 0.4rem; }
+        .readback-label { font-size: 0.58rem; letter-spacing: 0.03em; }
+        .base-stream { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 0.16rem; }
+        .base { width: 100%; min-width: 0; height: auto; aspect-ratio: 1; }
         .kpi-grid { grid-template-columns: 1fr 1fr; }
+        [data-testid="stMain"] ol.pipeline-flow { grid-template-columns: 1fr !important; }
+        .pipeline-stage,
+        .pipeline-preview .pipeline-stage { min-height: auto; }
+        .pipeline-shell-head { align-items: flex-start; }
+        .pipeline-ready { flex: 0 0 auto; }
+        .integrity-topline { align-items: flex-start; }
         .trace-row { grid-template-columns: 44px minmax(0, 1fr); }
         .trace-length { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hero::after,
+        .verification-line::after {
+          animation: none !important;
+        }
+
+        .vision-card,
+        .pipeline-stage,
+        .kpi,
+        [data-testid="stMain"] [data-testid="stBaseButton-primary"],
+        [data-testid="stMain"] [data-testid="stDownloadButton"] button {
+          scroll-behavior: auto !important;
+          transition: none !important;
+          transform: none !important;
+        }
       }
     </style>
     """,
@@ -862,12 +1282,14 @@ def _quality_panel(methods: list[tuple[str, Any]]) -> str:
     for label, evaluation in methods:
         normalized_distance = float(_value(evaluation, "normalized_edit_distance", 1.0))
         similarity = max(0.0, min(1.0, 1.0 - normalized_distance))
+        similarity_percent = 100 * similarity
+        accessible_label = html.escape(f"{label} similarity")
         rows.append(
             f"""
             <div class="quality-row">
               <div class="quality-label">{html.escape(label)}</div>
-              <div class="quality-track"><div class="quality-fill" style="width:{100 * similarity:.1f}%"></div></div>
-              <div class="quality-value">{100 * similarity:.1f}%</div>
+              <div class="quality-track" role="progressbar" aria-label="{accessible_label}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{similarity_percent:.1f}"><div class="quality-fill" style="width:{similarity_percent:.1f}%"></div></div>
+              <div class="quality-value">{similarity_percent:.1f}%</div>
             </div>
             """
         )
@@ -948,7 +1370,11 @@ def _run_file_configuration(
                 **configuration,
             )
     except Exception as error:  # Streamlit must remain usable after invalid uploads/settings.
-        st.error(f"The file recovery run could not be completed: {error}")
+        st.error(
+            "The file recovery run could not be completed safely. Check the settings and retry."
+        )
+        with st.expander("Technical recovery detail"):
+            st.code(str(error), language=None)
         return None
 
 
@@ -957,15 +1383,21 @@ def _file_pipeline_markup(result: Any) -> str:
     checksum_verified = bool(_value(result, "checksum_verified", False))
     config = _value(result, "config")
     decoder = str(_value(config, "decoder", "—"))
+    if decoder == "learned":
+        reconstruction_title = "Rank candidates"
+        reconstruction_detail = "4 reconstructions → learned ridge reranker"
+    else:
+        reconstruction_title = "Reconstruct"
+        reconstruction_detail = f"{decoder} · source-free inference"
     verification = "SHA-256 match" if checksum_verified else "Integrity failure"
     return _compact_html(f"""
-      <div class="pipeline-flow">
-        <div class="pipeline-stage"><span class="stage-number">01</span><strong>Frame bytes</strong><span>{_value(result, "original_size_bytes", 0)} B + versioned metadata</span></div>
-        <div class="pipeline-stage"><span class="stage-number">02</span><strong>Encode DNA</strong><span>{_value(result, "encoded_nucleotides", 0)} nt · exact 50% GC</span></div>
-        <div class="pipeline-stage"><span class="stage-number">03</span><strong>Simulate reads</strong><span>{_value(result, "fragment_count", 0)} known clusters · {_value(config, "cluster_size", 0)} reads each</span></div>
-        <div class="pipeline-stage"><span class="stage-number">04</span><strong>Reconstruct</strong><span>{html.escape(decoder)} · source-free inference</span></div>
-        <div class="pipeline-stage"><span class="stage-number">05</span><strong>Verify file</strong><span>{html.escape(verification)}</span></div>
-      </div>
+      <ol class="pipeline-flow" role="list" aria-label="Completed file recovery pipeline">
+        <li class="pipeline-stage"><span class="stage-number">01</span><strong>Frame bytes</strong><span>{_value(result, "original_size_bytes", 0)} B + versioned metadata</span></li>
+        <li class="pipeline-stage"><span class="stage-number">02</span><strong>Encode DNA</strong><span>{_value(result, "encoded_nucleotides", 0)} nt · exact 50% GC</span></li>
+        <li class="pipeline-stage"><span class="stage-number">03</span><strong>Simulate reads</strong><span>{_value(result, "fragment_count", 0)} known clusters · {_value(config, "cluster_size", 0)} reads each</span></li>
+        <li class="pipeline-stage"><span class="stage-number">04</span><strong>{html.escape(reconstruction_title)}</strong><span>{html.escape(reconstruction_detail)}</span></li>
+        <li class="pipeline-stage"><span class="stage-number">05</span><strong>Verify file</strong><span>{html.escape(verification)}</span></li>
+      </ol>
     """)
 
 
@@ -984,22 +1416,105 @@ def _learned_selection_markup(fragments: list[Any]) -> str:
     )
 
 
+def _render_archive_context() -> None:
+    """Keep the archive story available without delaying the operational proof."""
+    st.markdown('<div class="section-kicker">Why this matters</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section-title">The promise is not faster storage. It is longer-lived storage.</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        """
+        <div class="vision-grid">
+          <div class="vision-card accent">
+            <div class="vision-label">Why DNA?</div>
+            <h3>A possible medium for dense, durable cold archives</h3>
+            <p>
+              DNA is being researched for information that is written rarely and preserved for
+              decades, where information density, stability, and potentially low energy at rest can
+              matter more than instant access.
+            </p>
+            <div class="use-case-grid">
+              <div class="use-case">Film and image masters</div>
+              <div class="use-case">Scientific datasets</div>
+              <div class="use-case">Cultural collections</div>
+              <div class="use-case">Institutional records</div>
+            </div>
+          </div>
+          <div class="vision-card">
+            <div class="vision-label">Where HelixTrace fits</div>
+            <h3>Reliable readback from imperfect evidence</h3>
+            <p>
+              Sequencing can return imperfect reads. Insertions, deletions, and substitutions leave
+              several noisy observations of each stored fragment. HelixTrace tests how fixed methods
+              and a small learned selector can reconstruct those fragments and recover verified bytes.
+            </p>
+            <div class="reality-note">
+              DNA is not a replacement for cloud storage or SSDs today. Synthesis cost, read
+              latency, rewriting, fragment routing, and error correction remain major production
+              barriers. This app is a controlled software prototype focused on reconstruction.
+            </div>
+            <div class="research-links">
+              Research context:
+              <a href="https://www.nature.com/articles/s41467-021-21587-5" target="_blank">DNA stability</a>
+              · <a href="https://www.nature.com/articles/nbt.4079" target="_blank">large-scale retrieval</a>
+            </div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 st.markdown(
     """
     <section class="hero">
-      <div class="eyebrow">AI-assisted recovery for future DNA archives</div>
-      <h1>Recover files from noisy DNA reads—exactly, or not at all.</h1>
-      <p>
-        Some files are used every day. Others are meant to survive: films, images, scientific
-        datasets, and cultural records. HelixTrace explores the recovery layer of future DNA
-        archives, reconstructing corrupted fragments without seeing the original and releasing
-        bytes only when integrity is verified.
-      </p>
-      <div class="scope-strip">
-        <span class="scope-pill">● Future cold archives</span>
-        <span class="scope-pill">● ML-assisted reconstruction</span>
-        <span class="scope-pill">● Insertion/deletion aware</span>
-        <span class="scope-pill">● Verified bytes only</span>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">Readback protocol · controlled synthetic demo</div>
+          <h1>Recover files from noisy DNA reads—then verify every byte.</h1>
+          <p>
+            DNA is being explored for long-lived cold archives, from film masters to scientific
+            datasets. HelixTrace focuses on one controlled layer: reconstructing noisy synthetic
+            reads without the source, then releasing the file only when its embedded SHA-256
+            digest matches.
+          </p>
+          <div class="scope-strip">
+            <span class="scope-pill"><span class="scope-dot">●</span> Future cold archives</span>
+            <span class="scope-pill"><span class="scope-dot">●</span> ML-assisted selection</span>
+            <span class="scope-pill"><span class="scope-dot">●</span> IDS-aware reads</span>
+            <span class="scope-pill"><span class="scope-dot">●</span> Fail-closed download</span>
+          </div>
+        </div>
+        <div class="hero-instrument" role="img" aria-label="Conceptual readback view showing noisy DNA reads converging on a verified candidate">
+          <div class="instrument-head">
+            <span>Trace cluster / 04</span>
+            <span class="instrument-status">Synthetic preview</span>
+          </div>
+          <div class="readback-stack">
+            <div class="readback-row">
+              <span class="readback-label">Read 01</span>
+              <span class="base-stream"><span class="base">A</span><span class="base">C</span><span class="base base-error">T</span><span class="base">G</span><span class="base">C</span><span class="base">A</span><span class="base">T</span><span class="base">G</span></span>
+            </div>
+            <div class="readback-row">
+              <span class="readback-label">Read 02</span>
+              <span class="base-stream"><span class="base">A</span><span class="base">C</span><span class="base">G</span><span class="base base-error">·</span><span class="base">C</span><span class="base">A</span><span class="base">T</span><span class="base">G</span></span>
+            </div>
+            <div class="readback-row">
+              <span class="readback-label">Read 03</span>
+              <span class="base-stream"><span class="base">A</span><span class="base">C</span><span class="base">G</span><span class="base">G</span><span class="base">C</span><span class="base base-error">T</span><span class="base">A</span><span class="base">T</span></span>
+            </div>
+            <div class="readback-row">
+              <span class="readback-label">Output</span>
+              <span class="base-stream"><span class="base base-recovered">A</span><span class="base base-recovered">C</span><span class="base base-recovered">G</span><span class="base base-recovered">G</span><span class="base base-recovered">C</span><span class="base base-recovered">A</span><span class="base base-recovered">T</span><span class="base base-recovered">G</span></span>
+            </div>
+          </div>
+          <div class="verification-line"></div>
+          <div class="instrument-foot">
+            <span>SHA-256 integrity gate</span>
+            <span class="instrument-verdict">Release only on match</span>
+          </div>
+        </div>
       </div>
     </section>
     """,
@@ -1035,8 +1550,8 @@ with st.sidebar:
                 max_upload_size=1,
             )
             st.caption(
-                f"No upload? The built-in {DEFAULT_FILE_NAME} sample will be used. "
-                f"Interactive computation limit: {MAX_INTERACTIVE_FILE_BYTES} bytes."
+                f"Drop a file here or choose Upload. No file? The built-in {DEFAULT_FILE_NAME} "
+                f"sample runs automatically. Limit: {MAX_INTERACTIVE_FILE_BYTES} bytes."
             )
             decoder_label = st.selectbox("Decoder", tuple(decoder_labels))
             with st.expander("Recovery settings"):
@@ -1131,54 +1646,6 @@ with st.sidebar:
 
 
 if workspace == "File recovery":
-    st.markdown('<div class="section-kicker">Why this matters</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="section-title">The promise is not faster storage. It is longer-lived storage.</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """
-        <div class="vision-grid">
-          <div class="vision-card accent">
-            <div class="vision-label">Why DNA?</div>
-            <h3>A possible medium for dense, durable cold archives</h3>
-            <p>
-              DNA is being researched for information that is written rarely and preserved for
-              decades, where information density, stability, and potentially low energy at rest can
-              matter more than instant access.
-            </p>
-            <div class="use-case-grid">
-              <div class="use-case">Film and image masters</div>
-              <div class="use-case">Scientific datasets</div>
-              <div class="use-case">Cultural collections</div>
-              <div class="use-case">Institutional records</div>
-            </div>
-          </div>
-          <div class="vision-card">
-            <div class="vision-label">Where HelixTrace fits</div>
-            <h3>Reliable readback from imperfect evidence</h3>
-            <p>
-              Sequencing does not return a perfect copy. Insertions, deletions, and substitutions
-              leave several noisy observations of each stored fragment. HelixTrace tests how fixed
-              methods and a small learned selector can reconstruct those fragments and recover
-              verified bytes.
-            </p>
-            <div class="reality-note">
-              DNA is not a replacement for cloud storage or SSDs today. Synthesis cost, read
-              latency, rewriting, fragment routing, and error correction remain major production
-              barriers. This app is a controlled software prototype focused on reconstruction.
-            </div>
-            <div class="research-links">
-              Research context:
-              <a href="https://www.nature.com/articles/s41467-021-21587-5" target="_blank">DNA stability</a>
-              · <a href="https://www.nature.com/articles/nbt.4079" target="_blank">large-scale retrieval</a>
-            </div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
     if uploaded_file is None:
         file_data = DEFAULT_FILE_DATA
         file_name = DEFAULT_FILE_NAME
@@ -1243,24 +1710,99 @@ if workspace == "File recovery":
         else None
     )
     if file_result is None:
+        if selected_decoder == "learned":
+            reconstruction_stage_title = "Rank candidates"
+            reconstruction_stage_copy = "Four candidate reconstructions → learned ridge reranker."
+            reconstruction_note = (
+                "<strong>ML selects; it does not invent DNA.</strong>"
+                "The ridge model ranks four transparent candidates; SHA-256 decides whether any "
+                "file is released."
+            )
+        else:
+            reconstruction_stage_title = "Reconstruct"
+            reconstruction_stage_copy = (
+                f"{html.escape(decoder_label)} uses only the noisy read cluster."
+            )
+            reconstruction_note = (
+                "<strong>Source-free reconstruction.</strong>"
+                "The selected fixed decoder never receives the hidden source; SHA-256 still "
+                "controls release."
+            )
         st.markdown(
-            """
-            **What will happen when you run it**
-
-            1. A versioned frame stores the file bytes, metadata, and SHA-256 digest.
-            2. A reversible constrained code emits exactly 50% GC DNA with no adjacent repeats.
-            3. Each fragment produces a cluster of synthetic reads with IDS errors.
-            4. The selected source-free decoder reconstructs every fragment.
-            5. A download appears only if the decoded file passes its embedded SHA-256 check.
-            """
+            f"""
+            <div class="pipeline-shell">
+              <div class="pipeline-shell-head">
+                <div class="pipeline-shell-title">Recovery pipeline</div>
+                <div class="pipeline-ready">Ready to run</div>
+              </div>
+              <ol class="pipeline-flow pipeline-preview" role="list" aria-label="Five-stage file recovery pipeline">
+                <li class="pipeline-stage"><span class="stage-number">01</span><strong>Frame bytes</strong><span>Package payload, metadata, and embedded digest.</span><span class="stage-state">Pending</span></li>
+                <li class="pipeline-stage"><span class="stage-number">02</span><strong>Encode DNA</strong><span>Apply the reversible constrained storage code.</span><span class="stage-state">Pending</span></li>
+                <li class="pipeline-stage"><span class="stage-number">03</span><strong>Simulate reads</strong><span>Generate clustered reads with IDS errors.</span><span class="stage-state">Pending</span></li>
+                <li class="pipeline-stage"><span class="stage-number">04</span><strong>{reconstruction_stage_title}</strong><span>{reconstruction_stage_copy}</span><span class="stage-state">Pending</span></li>
+                <li class="pipeline-stage"><span class="stage-number">05</span><strong>Verify file</strong><span>Decode bytes; unlock only on the embedded SHA-256 match.</span><span class="stage-state">Locked</span></li>
+              </ol>
+              <div class="run-note"><span aria-hidden="true">→</span><span>{reconstruction_note}</span></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-        st.info("Use the built-in proof file or upload a small file, then start the recovery.")
+        _render_archive_context()
         st.stop()
 
     file_fragments = list(_value(file_result, "fragments", []))
     file_config = _value(file_result, "config")
     exact_fragments = int(_value(file_result, "exact_fragment_count", 0))
     fragment_count = int(_value(file_result, "fragment_count", len(file_fragments)))
+    checksum_verified = bool(_value(file_result, "checksum_verified", False))
+    if file_submitted:
+        if checksum_verified:
+            st.toast("Exact file recovered — verified download unlocked.", icon="✅")
+        else:
+            st.toast("Corruption detected — unverified output safely blocked.", icon="🛡️")
+    integrity_class = "integrity-panel" if checksum_verified else "integrity-panel failed"
+    integrity_title = "✓ Exact file recovered" if checksum_verified else "✕ Corruption detected"
+    integrity_gate = "Download unlocked" if checksum_verified else "Output blocked"
+    integrity_copy = (
+        "The reconstructed bytes match the digest stored before the noisy channel."
+        if checksum_verified
+        else "At least one fragment remained wrong, so HelixTrace refused to expose an unverified download."
+    )
+    st.markdown(
+        f"""
+        <div class="{integrity_class}" role="status" aria-live="polite">
+          <div class="integrity-topline">
+            <span class="integrity-label">Integrity verdict</span>
+            <span class="integrity-gate">{integrity_gate}</span>
+          </div>
+          <div class="integrity-title">{integrity_title}</div>
+          <p class="integrity-copy">{integrity_copy}</p>
+          <div class="hash-value">SHA-256 · {html.escape(str(_value(file_result, "original_sha256", "—")))}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    if checksum_verified and _value(file_result, "recovered_data") is not None:
+        st.download_button(
+            "Download verified recovered file",
+            data=_value(file_result, "recovered_data"),
+            file_name=str(_value(file_result, "recovered_filename", file_name) or file_name),
+            mime=str(
+                _value(file_result, "recovered_media_type", file_media_type) or file_media_type
+            ),
+            type="primary",
+            use_container_width=True,
+        )
+    elif recovery_error := _value(file_result, "error"):
+        st.warning(
+            "Recovery stopped safely. Try more reads, a lower error rate, or a different "
+            "deterministic seed."
+        )
+        with st.expander("Technical recovery detail"):
+            st.code(str(recovery_error), language=None)
+
+    st.markdown('<div class="section-kicker">Run evidence</div>', unsafe_allow_html=True)
     st.markdown(_file_pipeline_markup(file_result), unsafe_allow_html=True)
     st.markdown(
         f"""
@@ -1269,25 +1811,6 @@ if workspace == "File recovery":
           <div class="kpi"><div class="kpi-label">DNA payload</div><div class="kpi-value">{_value(file_result, "encoded_nucleotides", 0)} nt</div></div>
           <div class="kpi"><div class="kpi-label">Exact fragments</div><div class="kpi-value">{exact_fragments}/{fragment_count}</div></div>
           <div class="kpi"><div class="kpi-label">Total reads</div><div class="kpi-value">{fragment_count * int(_value(file_config, "cluster_size", 0))}</div></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    checksum_verified = bool(_value(file_result, "checksum_verified", False))
-    integrity_class = "integrity-panel" if checksum_verified else "integrity-panel failed"
-    integrity_title = "✓ Exact file recovered" if checksum_verified else "✕ Corruption detected"
-    integrity_copy = (
-        "The reconstructed bytes match the digest stored before the noisy channel."
-        if checksum_verified
-        else "At least one fragment remained wrong, so HelixTrace refused to expose an unverified download."
-    )
-    st.markdown(
-        f"""
-        <div class="{integrity_class}">
-          <strong>{integrity_title}</strong>
-          <p style="color:#405d56; margin:0.35rem 0 0.55rem; font-size:0.82rem;">{integrity_copy}</p>
-          <div class="hash-value">SHA-256 · {html.escape(str(_value(file_result, "original_sha256", "—")))}</div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -1315,21 +1838,6 @@ if workspace == "File recovery":
             "identical-candidate ties use a deterministic method label."
         )
 
-    if checksum_verified and _value(file_result, "recovered_data") is not None:
-        st.download_button(
-            "Download verified recovered file",
-            data=_value(file_result, "recovered_data"),
-            file_name=str(_value(file_result, "recovered_filename", file_name) or file_name),
-            mime=str(
-                _value(file_result, "recovered_media_type", file_media_type) or file_media_type
-            ),
-            type="primary",
-            use_container_width=True,
-        )
-    elif recovery_error := _value(file_result, "error"):
-        st.warning(str(recovery_error))
-        st.caption("Try more reads, a lower error rate, or a different deterministic seed.")
-
     if file_fragments:
         st.markdown('<div class="section-kicker">Read-level evidence</div>', unsafe_allow_html=True)
         st.markdown(
@@ -1353,6 +1861,8 @@ if workspace == "File recovery":
         with recovered_column:
             st.caption(f"Recovered · {_value(inspected, 'selected_method', 'decoder')}")
             st.code(str(_value(inspected, "reconstructed", "")), language=None)
+
+    _render_archive_context()
 
     with st.expander("Scientific scope and production gaps"):
         st.markdown(

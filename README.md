@@ -1,19 +1,21 @@
 # HelixTrace
 
-**AI-assisted recovery for future DNA archives.**
+**ML-assisted recovery for future DNA archives.**
 
 **Live demo:** https://helixtrace.streamlit.app
 
-Some files are used every day. Others are meant to survive: film and image masters, scientific
-datasets, cultural collections, and institutional records. Synthetic DNA is being researched as a
-future medium for this kind of cold archive because information density, long-term stability, and
-potentially low energy at rest can matter more than instant access.
+Some files are used every day. Others are meant to outlive the hardware they sit on: film and image
+masters, scientific datasets, cultural collections, and institutional records. Synthetic DNA is
+being researched as a future medium for this kind of cold archive because information density,
+long-term stability, and potentially low energy at rest can matter more than instant access.
 
-HelixTrace explores one difficult part of that future system: **reliable readback**. It takes a small
-binary file through a controlled DNA-storage path—encoding, fragmentation, synthetic insertion,
-deletion, and substitution reads, ML-assisted reconstruction, byte decoding, and SHA-256
+HelixTrace explores one difficult recovery layer in that future system: **reliable readback**. It
+takes a small binary file through a controlled DNA-storage path—encoding, fragmentation, synthetic
+insertion, deletion, and substitution reads, deterministic reconstruction, selection among four
+reconstruction candidates by a small trained ridge reranker, byte decoding, and embedded SHA-256
 verification. The reconstructor receives only the noisy read clusters. It releases a file only when
-the recovered bytes match the digest embedded before the channel.
+the recovered payload matches the digest embedded before the channel. A plausible-looking near miss
+is reported as failure, not success.
 
 This is a free, open-source **Developer Tools** prototype for testing DNA-storage reconstruction
 ideas. The public app needs no account, API key, credits, or paid service.
@@ -23,9 +25,10 @@ ideas. The public app needs no account, API key, credits, or paid service.
 
 ![HelixTrace verifies a file recovered from noisy synthetic DNA reads](output/playwright/helixtrace-file-recovery.png)
 
-The browser-verified built-in proof (seed 43) sends 5 bytes through 22 fragment clusters and 242
-noisy reads; all 22 fragments recover exactly, the file SHA-256 matches, and the verified download
-is enabled.
+The browser-verified built-in proof (seed 43) uses the learned candidate selector to send 5 bytes
+through 22 fragment clusters and 242 noisy reads; all 22 fragments recover exactly, the file
+SHA-256 matches, and the verified download is enabled. This single run is a product smoke test, not
+a recovery-rate estimate.
 
 ## Why DNA archives?
 
@@ -146,7 +149,7 @@ from a disjoint master seed. The held-out distribution covers lengths 40/60/80, 
 
 The learned gain over the strongest fixed candidate is deliberately not oversold: it reduced mean
 NED by 0.33% relative and removed one edit across all 120 held-out experiments; exact recovery did
-not change. It proves a trained selector with source-free inference is measurable, not that it
+not change. It shows that a trained selector with source-free inference is measurable, not that it
 generalizes to wet-lab data. It also cannot repair an error absent from all four candidates. The
 weights are dependency-free and reviewable in
 [`learned_reranker.py`](src/dna_trace_reconstruction/learned_reranker.py);
@@ -158,11 +161,13 @@ These held-out metrics evaluate strand candidates with three local-search steps.
 from the faster 40-nt-cap, one-step configuration used by the interactive demo's default learned
 run.
 
-## End-to-end file benchmark
+## Separate end-to-end file benchmark · consensus only
 
-The committed file benchmark runs 48 deterministic random 16-byte binary payloads through the
-constrained encoder and consensus decoder. Each condition contains 12 files; the fragment cap is
-64 nt, and insertion, deletion, and substitution each receive the listed per-event probability.
+Separately from the learned-reranker evaluation above, the committed file benchmark runs 48
+deterministic random 16-byte binary payloads through the constrained encoder and the fixed consensus
+decoder. It does not evaluate the learned selector. Each condition contains 12 files; the fragment
+cap is 64 nt, and insertion, deletion, and substitution each receive the listed per-event
+probability.
 
 | Reads/fragment | Probability for each IDS event | Full files with SHA match | Exact fragments | Mean fragment NED |
 |---:|---:|---:|---:|---:|
@@ -430,8 +435,10 @@ not the evidence for that development claim.
 3. Evaluate reconstruction on a real clustered nanopore dataset and calibrate the channel from
    empirical reads.
 4. Compare appropriate uncoded and coded baselines on identical splits.
-5. Train and validate a compact sequence reconstructor while retaining the deterministic methods
-   as controls.
+5. Train and validate a compact neural sequence reconstructor while retaining the deterministic
+   methods as controls. Compare a cross-entropy-only control with the same model augmented by
+   differentiable GC and homopolymer penalties across a `lambda` sweep, reporting both
+   reconstruction accuracy and biological constraint-violation rates.
 
 ## License
 
