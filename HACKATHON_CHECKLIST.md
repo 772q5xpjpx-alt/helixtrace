@@ -17,9 +17,9 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 - [x] Final app and submission-document update: `611c4e4` (`main`), pushed July 21, 2026.
 - [x] Final checklist update `28c326e` passed GitHub Actions CI:
   https://github.com/772q5xpjpx-alt/helixtrace/actions/runs/29847470857
-- [x] Devpost fields and public page rechecked July 21, 2026 at 18:25 CEST: the new video is
-  embedded, the current judge instructions persist, and finalization still displays
-  `Project submitted!`.
+- [x] Devpost fields and public page rechecked July 21, 2026 at 18:40 CEST: the new video is
+  embedded, the final recovery screenshot and cold-start note persist, and finalization still
+  displays `Project submitted!`.
 - [x] Anonymous Streamlit session check followed the normal authentication bootstrap back to the
   app and returned HTTP 200: https://helixtrace.streamlit.app
 
@@ -152,7 +152,8 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
   limitations.
 - [x] Address all four equally weighted judging dimensions: technological implementation, design,
   potential impact, and quality of the idea.
-- [ ] Add clear screenshots or project images that match the final app.
+- [x] Add a clear project image that matches the final app and shows verified file recovery.
+- [x] Warn judges that the free Streamlit instance may take around 20 seconds to wake on first load.
 - [x] Add the public repository URL, deployed demo URL, and public YouTube URL.
 - [x] Add concise testing instructions and any credentials if genuinely required.
 - [x] Add the required `/feedback` Codex Session ID.
