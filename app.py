@@ -35,7 +35,7 @@ MAX_INTERACTIVE_FILE_BYTES = 256
 
 
 st.set_page_config(
-    page_title="HelixTrace · DNA trace reconstruction",
+    page_title="HelixTrace - ML Assist For Synthetic DNA",
     page_icon="🧬",
     layout="wide",
     initial_sidebar_state="expanded",

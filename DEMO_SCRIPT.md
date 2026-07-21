@@ -1,7 +1,7 @@
-# HelixTrace demo video
+# HelixTrace - ML Assist For Synthetic DNA · demo video
 
 **Target runtime:** 2:40<br>
-**Public video:** https://youtu.be/ZfXLHUCXbVg<br>
+**Public video:** https://youtu.be/-ZeMx-drbGg<br>
 **Audio:** Álvaro's natural voice; no synthetic narration and no copyrighted music<br>
 **Visual style:** real product interaction, visible cursor, short zooms, purposeful cuts, and almost
 no title cards

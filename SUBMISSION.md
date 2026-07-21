@@ -1,4 +1,4 @@
-# HelixTrace
+# HelixTrace - ML Assist For Synthetic DNA
 
 **Tagline:** ML-assisted recovery for future DNA archives
 
@@ -11,7 +11,7 @@ extension
 
 - **Live demo:** https://helixtrace.streamlit.app
 - **GitHub repository:** https://github.com/772q5xpjpx-alt/helixtrace
-- **Demo video:** https://youtu.be/ZfXLHUCXbVg
+- **Demo video:** https://youtu.be/-ZeMx-drbGg
 - **Codex `/feedback` Session ID:** 019f4b16-2c47-7410-b4b9-1c4d41bcbef0
 
 ## Short description
