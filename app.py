@@ -140,6 +140,18 @@ st.markdown(
 
       [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] {
         background: #f8fbf9;
+        align-items: center;
+        gap: 0.55rem;
+        min-height: 0;
+        padding: 0.72rem !important;
+      }
+
+      [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"]::after {
+        content: "or drop a file here";
+        color: #526a64;
+        font-size: 0.7rem;
+        font-weight: 700;
+        line-height: 1.25;
       }
 
       [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button {
@@ -333,11 +345,12 @@ st.markdown(
       .instrument-head,
       .instrument-foot {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
         gap: 0.8rem;
         color: #a9c8bf;
-        font: 650 0.62rem/1.2 var(--font-mono);
+        font: 650 0.66rem/1.2 var(--font-mono);
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
@@ -373,9 +386,10 @@ st.markdown(
 
       .readback-label {
         color: #789e93;
-        font: 600 0.58rem/1 var(--font-mono);
+        font: 600 0.62rem/1 var(--font-mono);
         letter-spacing: 0.08em;
         text-transform: uppercase;
+        white-space: nowrap;
       }
 
       .base-stream {
@@ -616,13 +630,21 @@ st.markdown(
         margin-top: 0.22rem;
       }
 
-      .pipeline-flow {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 0.62rem;
-        margin: 1rem 0;
-        padding: 0;
-        list-style: none;
+      [data-testid="stMain"] ol.pipeline-flow {
+        display: grid !important;
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+        align-items: stretch;
+        gap: 0.62rem !important;
+        width: 100%;
+        margin: 1rem 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+      }
+
+      [data-testid="stMain"] ol.pipeline-flow > li.pipeline-stage {
+        display: block;
+        margin: 0 !important;
+        list-style: none !important;
       }
 
       .pipeline-stage {
@@ -1079,9 +1101,9 @@ st.markdown(
         }
       }
 
-      @media (max-width: 900px) {
+      @media (max-width: 1240px) {
         .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .pipeline-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        [data-testid="stMain"] ol.pipeline-flow { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
         .vision-grid { grid-template-columns: 1fr; }
         .hero-grid { grid-template-columns: 1fr; }
         .hero-instrument { max-width: 620px; }
@@ -1095,12 +1117,12 @@ st.markdown(
         .hero p { font-size: 0.94rem; line-height: 1.5; }
         .scope-pill { font-size: 0.69rem; }
         .hero-instrument { padding: 0.8rem; }
-        .readback-row { grid-template-columns: 3.8rem minmax(0, 1fr); gap: 0.4rem; }
-        .readback-label { font-size: 0.5rem; letter-spacing: 0.03em; white-space: nowrap; }
+        .readback-row { grid-template-columns: 3.55rem minmax(0, 1fr); gap: 0.4rem; }
+        .readback-label { font-size: 0.58rem; letter-spacing: 0.03em; }
         .base-stream { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 0.16rem; }
         .base { width: 100%; min-width: 0; height: auto; aspect-ratio: 1; }
         .kpi-grid { grid-template-columns: 1fr 1fr; }
-        .pipeline-flow { grid-template-columns: 1fr; }
+        [data-testid="stMain"] ol.pipeline-flow { grid-template-columns: 1fr !important; }
         .pipeline-stage,
         .pipeline-preview .pipeline-stage { min-height: auto; }
         .pipeline-shell-head { align-items: flex-start; }
@@ -1348,7 +1370,11 @@ def _run_file_configuration(
                 **configuration,
             )
     except Exception as error:  # Streamlit must remain usable after invalid uploads/settings.
-        st.error(f"The file recovery run could not be completed: {error}")
+        st.error(
+            "The file recovery run could not be completed safely. Check the settings and retry."
+        )
+        with st.expander("Technical recovery detail"):
+            st.code(str(error), language=None)
         return None
 
 
@@ -1357,13 +1383,19 @@ def _file_pipeline_markup(result: Any) -> str:
     checksum_verified = bool(_value(result, "checksum_verified", False))
     config = _value(result, "config")
     decoder = str(_value(config, "decoder", "—"))
+    if decoder == "learned":
+        reconstruction_title = "Rank candidates"
+        reconstruction_detail = "4 reconstructions → learned ridge reranker"
+    else:
+        reconstruction_title = "Reconstruct"
+        reconstruction_detail = f"{decoder} · source-free inference"
     verification = "SHA-256 match" if checksum_verified else "Integrity failure"
     return _compact_html(f"""
       <ol class="pipeline-flow" role="list" aria-label="Completed file recovery pipeline">
         <li class="pipeline-stage"><span class="stage-number">01</span><strong>Frame bytes</strong><span>{_value(result, "original_size_bytes", 0)} B + versioned metadata</span></li>
         <li class="pipeline-stage"><span class="stage-number">02</span><strong>Encode DNA</strong><span>{_value(result, "encoded_nucleotides", 0)} nt · exact 50% GC</span></li>
         <li class="pipeline-stage"><span class="stage-number">03</span><strong>Simulate reads</strong><span>{_value(result, "fragment_count", 0)} known clusters · {_value(config, "cluster_size", 0)} reads each</span></li>
-        <li class="pipeline-stage"><span class="stage-number">04</span><strong>Reconstruct</strong><span>{html.escape(decoder)} · source-free inference</span></li>
+        <li class="pipeline-stage"><span class="stage-number">04</span><strong>{html.escape(reconstruction_title)}</strong><span>{html.escape(reconstruction_detail)}</span></li>
         <li class="pipeline-stage"><span class="stage-number">05</span><strong>Verify file</strong><span>{html.escape(verification)}</span></li>
       </ol>
     """)
@@ -1384,13 +1416,63 @@ def _learned_selection_markup(fragments: list[Any]) -> str:
     )
 
 
+def _render_archive_context() -> None:
+    """Keep the archive story available without delaying the operational proof."""
+    st.markdown('<div class="section-kicker">Why this matters</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section-title">The promise is not faster storage. It is longer-lived storage.</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        """
+        <div class="vision-grid">
+          <div class="vision-card accent">
+            <div class="vision-label">Why DNA?</div>
+            <h3>A possible medium for dense, durable cold archives</h3>
+            <p>
+              DNA is being researched for information that is written rarely and preserved for
+              decades, where information density, stability, and potentially low energy at rest can
+              matter more than instant access.
+            </p>
+            <div class="use-case-grid">
+              <div class="use-case">Film and image masters</div>
+              <div class="use-case">Scientific datasets</div>
+              <div class="use-case">Cultural collections</div>
+              <div class="use-case">Institutional records</div>
+            </div>
+          </div>
+          <div class="vision-card">
+            <div class="vision-label">Where HelixTrace fits</div>
+            <h3>Reliable readback from imperfect evidence</h3>
+            <p>
+              Sequencing can return imperfect reads. Insertions, deletions, and substitutions leave
+              several noisy observations of each stored fragment. HelixTrace tests how fixed methods
+              and a small learned selector can reconstruct those fragments and recover verified bytes.
+            </p>
+            <div class="reality-note">
+              DNA is not a replacement for cloud storage or SSDs today. Synthesis cost, read
+              latency, rewriting, fragment routing, and error correction remain major production
+              barriers. This app is a controlled software prototype focused on reconstruction.
+            </div>
+            <div class="research-links">
+              Research context:
+              <a href="https://www.nature.com/articles/s41467-021-21587-5" target="_blank">DNA stability</a>
+              · <a href="https://www.nature.com/articles/nbt.4079" target="_blank">large-scale retrieval</a>
+            </div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 st.markdown(
     """
     <section class="hero">
       <div class="hero-grid">
         <div class="hero-copy">
           <div class="eyebrow">Readback protocol · controlled synthetic demo</div>
-          <h1>Recover files from noisy DNA reads—then prove every byte.</h1>
+          <h1>Recover files from noisy DNA reads—then verify every byte.</h1>
           <p>
             DNA is being explored for long-lived cold archives, from film masters to scientific
             datasets. HelixTrace focuses on one controlled layer: reconstructing noisy synthetic
@@ -1423,7 +1505,7 @@ st.markdown(
               <span class="base-stream"><span class="base">A</span><span class="base">C</span><span class="base">G</span><span class="base">G</span><span class="base">C</span><span class="base base-error">T</span><span class="base">A</span><span class="base">T</span></span>
             </div>
             <div class="readback-row">
-              <span class="readback-label">Candidate</span>
+              <span class="readback-label">Output</span>
               <span class="base-stream"><span class="base base-recovered">A</span><span class="base base-recovered">C</span><span class="base base-recovered">G</span><span class="base base-recovered">G</span><span class="base base-recovered">C</span><span class="base base-recovered">A</span><span class="base base-recovered">T</span><span class="base base-recovered">G</span></span>
             </div>
           </div>
@@ -1468,8 +1550,8 @@ with st.sidebar:
                 max_upload_size=1,
             )
             st.caption(
-                f"No upload? The built-in {DEFAULT_FILE_NAME} sample will be used. "
-                f"Interactive computation limit: {MAX_INTERACTIVE_FILE_BYTES} bytes."
+                f"Drop a file here or choose Upload. No file? The built-in {DEFAULT_FILE_NAME} "
+                f"sample runs automatically. Limit: {MAX_INTERACTIVE_FILE_BYTES} bytes."
             )
             decoder_label = st.selectbox("Decoder", tuple(decoder_labels))
             with st.expander("Recovery settings"):
@@ -1564,54 +1646,6 @@ with st.sidebar:
 
 
 if workspace == "File recovery":
-    st.markdown('<div class="section-kicker">Why this matters</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="section-title">The promise is not faster storage. It is longer-lived storage.</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """
-        <div class="vision-grid">
-          <div class="vision-card accent">
-            <div class="vision-label">Why DNA?</div>
-            <h3>A possible medium for dense, durable cold archives</h3>
-            <p>
-              DNA is being researched for information that is written rarely and preserved for
-              decades, where information density, stability, and potentially low energy at rest can
-              matter more than instant access.
-            </p>
-            <div class="use-case-grid">
-              <div class="use-case">Film and image masters</div>
-              <div class="use-case">Scientific datasets</div>
-              <div class="use-case">Cultural collections</div>
-              <div class="use-case">Institutional records</div>
-            </div>
-          </div>
-          <div class="vision-card">
-            <div class="vision-label">Where HelixTrace fits</div>
-            <h3>Reliable readback from imperfect evidence</h3>
-            <p>
-              Sequencing does not return a perfect copy. Insertions, deletions, and substitutions
-              leave several noisy observations of each stored fragment. HelixTrace tests how fixed
-              methods and a small learned selector can reconstruct those fragments and recover
-              verified bytes.
-            </p>
-            <div class="reality-note">
-              DNA is not a replacement for cloud storage or SSDs today. Synthesis cost, read
-              latency, rewriting, fragment routing, and error correction remain major production
-              barriers. This app is a controlled software prototype focused on reconstruction.
-            </div>
-            <div class="research-links">
-              Research context:
-              <a href="https://www.nature.com/articles/s41467-021-21587-5" target="_blank">DNA stability</a>
-              · <a href="https://www.nature.com/articles/nbt.4079" target="_blank">large-scale retrieval</a>
-            </div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
     if uploaded_file is None:
         file_data = DEFAULT_FILE_DATA
         file_name = DEFAULT_FILE_NAME
@@ -1676,8 +1710,26 @@ if workspace == "File recovery":
         else None
     )
     if file_result is None:
+        if selected_decoder == "learned":
+            reconstruction_stage_title = "Rank candidates"
+            reconstruction_stage_copy = "Four candidate reconstructions → learned ridge reranker."
+            reconstruction_note = (
+                "<strong>ML selects; it does not invent DNA.</strong>"
+                "The ridge model ranks four transparent candidates; SHA-256 decides whether any "
+                "file is released."
+            )
+        else:
+            reconstruction_stage_title = "Reconstruct"
+            reconstruction_stage_copy = (
+                f"{html.escape(decoder_label)} uses only the noisy read cluster."
+            )
+            reconstruction_note = (
+                "<strong>Source-free reconstruction.</strong>"
+                "The selected fixed decoder never receives the hidden source; SHA-256 still "
+                "controls release."
+            )
         st.markdown(
-            """
+            f"""
             <div class="pipeline-shell">
               <div class="pipeline-shell-head">
                 <div class="pipeline-shell-title">Recovery pipeline</div>
@@ -1687,14 +1739,15 @@ if workspace == "File recovery":
                 <li class="pipeline-stage"><span class="stage-number">01</span><strong>Frame bytes</strong><span>Package payload, metadata, and embedded digest.</span><span class="stage-state">Pending</span></li>
                 <li class="pipeline-stage"><span class="stage-number">02</span><strong>Encode DNA</strong><span>Apply the reversible constrained storage code.</span><span class="stage-state">Pending</span></li>
                 <li class="pipeline-stage"><span class="stage-number">03</span><strong>Simulate reads</strong><span>Generate clustered reads with IDS errors.</span><span class="stage-state">Pending</span></li>
-                <li class="pipeline-stage"><span class="stage-number">04</span><strong>Reconstruct</strong><span>Infer each fragment without the source.</span><span class="stage-state">Pending</span></li>
-                <li class="pipeline-stage"><span class="stage-number">05</span><strong>Verify file</strong><span>Open the download gate only on a SHA-256 match.</span><span class="stage-state">Locked</span></li>
+                <li class="pipeline-stage"><span class="stage-number">04</span><strong>{reconstruction_stage_title}</strong><span>{reconstruction_stage_copy}</span><span class="stage-state">Pending</span></li>
+                <li class="pipeline-stage"><span class="stage-number">05</span><strong>Verify file</strong><span>Decode bytes; unlock only on the embedded SHA-256 match.</span><span class="stage-state">Locked</span></li>
               </ol>
-              <div class="run-note"><span aria-hidden="true">→</span><span><strong>Your proof is ready.</strong>Use the built-in file or upload up to 256 bytes, then start recovery from the sidebar.</span></div>
+              <div class="run-note"><span aria-hidden="true">→</span><span>{reconstruction_note}</span></div>
             </div>
             """,
             unsafe_allow_html=True,
         )
+        _render_archive_context()
         st.stop()
 
     file_fragments = list(_value(file_result, "fragments", []))
@@ -1702,6 +1755,11 @@ if workspace == "File recovery":
     exact_fragments = int(_value(file_result, "exact_fragment_count", 0))
     fragment_count = int(_value(file_result, "fragment_count", len(file_fragments)))
     checksum_verified = bool(_value(file_result, "checksum_verified", False))
+    if file_submitted:
+        if checksum_verified:
+            st.toast("Exact file recovered — verified download unlocked.", icon="✅")
+        else:
+            st.toast("Corruption detected — unverified output safely blocked.", icon="🛡️")
     integrity_class = "integrity-panel" if checksum_verified else "integrity-panel failed"
     integrity_title = "✓ Exact file recovered" if checksum_verified else "✕ Corruption detected"
     integrity_gate = "Download unlocked" if checksum_verified else "Output blocked"
@@ -1737,8 +1795,12 @@ if workspace == "File recovery":
             use_container_width=True,
         )
     elif recovery_error := _value(file_result, "error"):
-        st.warning(str(recovery_error))
-        st.caption("Try more reads, a lower error rate, or a different deterministic seed.")
+        st.warning(
+            "Recovery stopped safely. Try more reads, a lower error rate, or a different "
+            "deterministic seed."
+        )
+        with st.expander("Technical recovery detail"):
+            st.code(str(recovery_error), language=None)
 
     st.markdown('<div class="section-kicker">Run evidence</div>', unsafe_allow_html=True)
     st.markdown(_file_pipeline_markup(file_result), unsafe_allow_html=True)
@@ -1799,6 +1861,8 @@ if workspace == "File recovery":
         with recovered_column:
             st.caption(f"Recovered · {_value(inspected, 'selected_method', 'decoder')}")
             st.code(str(_value(inspected, "reconstructed", "")), language=None)
+
+    _render_archive_context()
 
     with st.expander("Scientific scope and production gaps"):
         st.markdown(

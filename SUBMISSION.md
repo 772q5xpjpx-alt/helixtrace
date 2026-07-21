@@ -1,6 +1,6 @@
 # HelixTrace
 
-**Tagline:** AI-assisted recovery for future DNA archives
+**Tagline:** ML-assisted recovery for future DNA archives
 
 **Track:** Developer Tools
 
@@ -16,10 +16,11 @@ extension
 
 ## Short description
 
-HelixTrace is an ML-assisted prototype for recovering files from noisy synthetic-DNA reads. It
-reconstructs corrupted fragments without access to the original and releases a file only when
-SHA-256 proves every recovered byte is correct. The public app is free and requires no account,
-API key, or paid credits.
+HelixTrace is an ML-assisted prototype for recovering files from noisy synthetic-DNA reads. Its
+current ML component is a small trained ridge reranker that selects among four source-free
+reconstruction candidates; it does not generate DNA. HelixTrace releases a file only when the
+recovered payload matches the embedded SHA-256 digest. The public app is free and requires no
+account, API key, or paid credits.
 
 ## Inspiration and problem
 
@@ -188,12 +189,14 @@ occurred, and judges do not need an API key or paid credits.
 
 ### End-to-end file contract
 
-In browser QA, the final product configuration sent the built-in 5-byte proof through 22 fragment
-clusters and 242 noisy reads. All 22 fragments were exact, the SHA-256 matched, and the verified
-download became available.
+In browser QA, the final product configuration used the learned candidate selector to send the
+built-in 5-byte proof through 22 fragment clusters and 242 noisy reads. All 22 fragments were exact,
+the embedded SHA-256 digest matched, and the verified download became available. This single run is
+a product smoke test, not a recovery-rate estimate.
 
-The committed file benchmark runs 48 deterministic random 16-byte binary payloads through the
-constrained encoder and consensus decoder. Every cell has 12 files; the fragment cap is 64 nt, and
+Separately from the learned-reranker evaluation, the committed file benchmark runs 48 deterministic
+random 16-byte binary payloads through the constrained encoder and the fixed consensus decoder. It
+does not evaluate the learned selector. Every cell has 12 files; the fragment cap is 64 nt, and
 insertion, deletion, and substitution each receive the listed categorical per-event probability.
 
 | Reads/fragment | Probability for each IDS event | Full files with SHA match | Exact fragments | Mean fragment NED |
@@ -326,8 +329,10 @@ useful lesson: a measurable ML result can be technically real yet too small to s
 2. Add explicit addresses, demultiplexing, fragment-loss simulation, and a documented ECC layer.
 3. Evaluate on real clustered nanopore reads and estimate channel parameters from empirical data.
 4. Compare appropriate coded and uncoded baselines on identical splits.
-5. Train a compact sequence reconstructor and test differentiable biological constraints while
-   retaining the deterministic engine as a control.
+5. Train a compact neural sequence reconstructor while retaining the deterministic engine as a
+   control. Compare a cross-entropy-only control with the same model augmented by differentiable GC
+   and homopolymer penalties across a `lambda` sweep, reporting both reconstruction accuracy and
+   biological constraint-violation rates.
 6. Add confidence estimates and failure localization instead of only a whole-file pass/fail result.
 
 ## Pre-existing work versus Build Week extension
