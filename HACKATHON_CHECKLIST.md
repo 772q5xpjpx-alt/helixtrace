@@ -10,9 +10,11 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 ## Submission record
 
 - [x] **Submitted successfully to OpenAI Build Week on July 21, 2026 at 01:44 CEST.**
-- [x] Devpost displayed `Project submitted!` and lists HelixTrace under **SUBMITTED TO — OpenAI
-  Build Week**: https://devpost.com/software/helixtrace
-- [x] Submitted repository commit: `af9ed923e60359e2c416eb2e7d0be0904a884d0f` (`main`).
+- [x] Devpost displayed `Project submitted!` and lists
+  **HelixTrace - ML Assist For Synthetic DNA** under **SUBMITTED TO — OpenAI Build Week**:
+  https://devpost.com/software/helixtrace
+- [x] Original submitted repository commit: `af9ed923e60359e2c416eb2e7d0be0904a884d0f` (`main`).
+- [x] Final app and submission-document update: `611c4e4` (`main`), pushed July 21, 2026.
 - [x] Final GitHub Actions CI completed successfully for the submitted commit.
 - [x] Anonymous Streamlit session check followed the normal authentication bootstrap back to the
   app and returned HTTP 200: https://helixtrace.streamlit.app
@@ -105,17 +107,17 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
 ## Demonstration video
 
 - [x] Write a script that fits comfortably under three minutes; judges need not watch beyond 3:00.
-- [ ] Show the live product, not slides alone: run the file recovery, reveal the SHA-256 gate and
+- [x] Show the live product, not slides alone: run the file recovery, reveal the SHA-256 gate and
   enabled download, inspect one corrupted read/reconstructed fragment, then show the held-out ML
   and end-to-end benchmark results.
-- [ ] Explain clearly with audio what was built and how Codex powered by GPT-5.6 Sol was used during
+- [x] Explain clearly with audio what was built and how Codex powered by GPT-5.6 Sol was used during
   development; do not claim a live Responses API call.
-- [ ] State the controlled-synthetic, known-routing, no-ECC, small-file, and no-wet-lab limitations
+- [x] State the controlled-synthetic, known-routing, no-ECC, small-file, and no-wet-lab limitations
   aloud or visibly.
-- [ ] Avoid unlicensed music, third-party trademarks, and copyrighted material.
-- [ ] Record at readable resolution with legible text and clean audio.
+- [x] Avoid unlicensed music, third-party trademarks, and copyrighted material.
+- [x] Record at readable resolution with legible text and clean audio.
 - [x] Upload the final video to YouTube as **Public** and keep it publicly visible:
-  https://youtu.be/ZfXLHUCXbVg
+  https://youtu.be/-ZeMx-drbGg
 - [x] Verify the full YouTube video and audio in a signed-out/incognito browser.
 - [x] Save the public YouTube URL for Devpost.
 
