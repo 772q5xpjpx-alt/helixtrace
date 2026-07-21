@@ -17,7 +17,8 @@ def test_streamlit_app_opens_on_file_recovery(monkeypatch):
 
     assert not app.exception
     assert not app.error
-    assert any("Recover real files" in block.value for block in app.markdown)
+    assert any("Recover files from noisy DNA reads" in block.value for block in app.markdown)
+    assert any("Why DNA?" in block.value for block in app.markdown)
     assert _button(app, "Encode, simulate & recover")
 
 
@@ -36,12 +37,16 @@ def test_streamlit_app_recovers_default_file_with_fast_consensus():
 def test_streamlit_app_reports_invalid_dna_without_crashing():
     app = AppTest.from_file("app.py", default_timeout=15).run()
     _open_strand_sandbox(app)
+    assert any("Known source and channel conditions" in block.value for block in app.markdown)
+    assert not any("Why DNA?" in block.value for block in app.markdown)
+
     app.text_area[0].set_value("ACNX")
     _button(app, "Run experiment").click()
     app.run()
 
     assert not app.exception
     assert "invalid symbols: N, X" in app.error[0].value
+    assert not any("Known source and channel conditions" in block.value for block in app.markdown)
 
 
 def test_streamlit_app_guided_interpretation_needs_no_api_key(monkeypatch):

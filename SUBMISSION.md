@@ -1,6 +1,6 @@
 # HelixTrace
 
-**Tagline:** Source-free file recovery from noisy synthetic DNA
+**Tagline:** AI-assisted recovery for future DNA archives
 
 **Track:** Developer Tools
 
@@ -16,13 +16,17 @@ extension
 
 ## Short description
 
-HelixTrace is a free developer workbench that sends a real binary file through a controlled
-DNA-storage read path: constrained DNA encoding, fragmentation, synthetic insertion/deletion/
-substitution reads, source-free reconstruction, byte decoding, and SHA-256 verification. It makes
-success falsifiable: the file is verified only when the reconstructed bytes match the digest stored
-before the noisy channel.
+HelixTrace is an ML-assisted prototype for recovering files from noisy synthetic-DNA reads. It
+reconstructs corrupted fragments without access to the original and releases a file only when
+SHA-256 proves every recovered byte is correct. The public app is free and requires no account,
+API key, or paid credits.
 
 ## Inspiration and problem
+
+Some files are used every day. Others are meant to survive: films, images, scientific datasets,
+cultural collections, and institutional records. Synthetic DNA could become an exceptionally
+dense, durable medium for those long-lived cold archives—but only if imperfect sequencing reads can
+be reconstructed reliably.
 
 Digital data can be encoded into synthetic DNA, but reading it back is not a simple character-by-
 character operation. Insertions and deletions shift every following base; substitutions change
@@ -33,6 +37,24 @@ My original goal was not only to explain DNA storage. I wanted to build toward a
 recover the underlying data—an image, text, or another binary file—and clearly distinguish exact
 recovery from a result that merely looks plausible. HelixTrace turns that goal into a runnable,
 reproducible prototype for decoder development and benchmarking.
+
+## Why DNA archives and who this helps
+
+DNA is not a faster replacement for cloud storage or SSDs. Its potential advantage is cold data:
+information written rarely and preserved for decades, where information density, stability, and
+potentially low energy at rest matter more than instant access. The long-term audience includes
+researchers building DNA-storage codecs and future custodians of film, scientific, cultural, and
+institutional archives.
+
+The medium is not production-ready. Synthesis cost, read latency, rewriting, fragment routing,
+error correction, and empirical sequencing performance remain serious barriers. HelixTrace focuses
+on one of them: recovering original bytes from noisy read clusters and making exactness testable
+instead of returning a file that merely looks plausible.
+
+That focus is useful now as a developer tool. A decoder researcher can compare fixed and learned
+methods under identical seeded evidence, inspect a failed fragment, and use an embedded checksum as
+the final contract. The same recovery layer could later sit inside a fuller system with addressing,
+ECC, clustering, and wet-lab reads.
 
 ## What it does
 

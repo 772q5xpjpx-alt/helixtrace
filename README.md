@@ -1,14 +1,19 @@
 # HelixTrace
 
-**A source-free recovery workbench for files stored in noisy synthetic DNA.**
+**AI-assisted recovery for future DNA archives.**
 
 **Live demo:** https://helixtrace.streamlit.app
 
-HelixTrace takes a small binary file through the complete read path: versioned framing, DNA
-encoding, fragmentation, synthetic insertion/deletion/substitution (IDS) reads, per-fragment
-reconstruction, byte decoding, and SHA-256 verification. The reconstructor receives only the noisy
-read clusters. A run counts as verified only when the recovered bytes match the digest embedded
-before the channel.
+Some files are used every day. Others are meant to survive: film and image masters, scientific
+datasets, cultural collections, and institutional records. Synthetic DNA is being researched as a
+future medium for this kind of cold archive because information density, long-term stability, and
+potentially low energy at rest can matter more than instant access.
+
+HelixTrace explores one difficult part of that future system: **reliable readback**. It takes a small
+binary file through a controlled DNA-storage path—encoding, fragmentation, synthetic insertion,
+deletion, and substitution reads, ML-assisted reconstruction, byte decoding, and SHA-256
+verification. The reconstructor receives only the noisy read clusters. It releases a file only when
+the recovered bytes match the digest embedded before the channel.
 
 This is a free, open-source **Developer Tools** prototype for testing DNA-storage reconstruction
 ideas. The public app needs no account, API key, credits, or paid service.
@@ -21,6 +26,24 @@ ideas. The public app needs no account, API key, credits, or paid service.
 The browser-verified built-in proof (seed 43) sends 5 bytes through 22 fragment clusters and 242
 noisy reads; all 22 fragments recover exactly, the file SHA-256 matches, and the verified download
 is enabled.
+
+## Why DNA archives?
+
+DNA is not a replacement for cloud storage, SSDs, or magnetic tape today. Its most credible early
+role is **cold data**: information written rarely and preserved for decades or longer. Research has
+demonstrated large-scale DNA storage and retrieval, while reviews identify exceptional theoretical
+density, potentially long lifetimes, and the prospect of low energy at rest as the medium's
+attraction.
+
+The trade-offs are equally important. DNA synthesis remains expensive and slow; sequencing has
+latency and errors; rewriting is difficult; and a complete system still needs addressing,
+clustering, error correction, and physical validation. HelixTrace does not pretend those problems
+are solved. It focuses on reconstructing the original file from imperfect observations and refusing
+to return an unverified result.
+
+- [DNA stability and storage-system trade-offs — Nature Communications](https://www.nature.com/articles/s41467-021-21587-5)
+- [Random access in large-scale DNA data storage — Nature Biotechnology](https://www.nature.com/articles/nbt.4079)
+- [Low-cost synthesis with reconstruction and error correction — Nature Communications](https://www.nature.com/articles/s41467-020-19148-3)
 
 ## What you can test
 

@@ -76,8 +76,30 @@ st.markdown(
         background: transparent;
       }
 
-      [data-testid="stToolbar"], [data-testid="stDecoration"], #MainMenu, footer {
-        visibility: hidden;
+      [data-testid="stToolbar"] {
+        visibility: visible;
+      }
+
+      [data-testid="stAppDeployButton"],
+      [data-testid="stMainMenu"],
+      [data-testid="stDecoration"],
+      #MainMenu,
+      footer {
+        display: none;
+      }
+
+      [data-testid="stExpandSidebarButton"] {
+        visibility: visible !important;
+      }
+
+      [data-testid="stExpandSidebarButton"] button {
+        color: var(--mint-dark) !important;
+        background: rgba(255, 255, 255, 0.82);
+        border-radius: 8px;
+      }
+
+      [data-testid="stSidebarCollapseButton"] button {
+        color: #f4fbf8 !important;
       }
 
       [data-testid="stSidebar"] {
@@ -103,6 +125,25 @@ st.markdown(
       [data-testid="stSidebar"] textarea::placeholder,
       [data-testid="stSidebar"] input::placeholder {
         color: #73827e !important;
+      }
+
+      [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"],
+      [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] * {
+        color: #173b34 !important;
+      }
+
+      [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] {
+        background: #f8fbf9;
+      }
+
+      [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button {
+        background: #dff3eb;
+        color: #075748 !important;
+        border: 1px solid rgba(13, 124, 102, 0.18);
+      }
+
+      [data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] {
+        display: none;
       }
 
       [data-testid="stSidebar"] [data-baseweb="slider"] div[role="slider"] {
@@ -200,6 +241,85 @@ st.markdown(
         background: rgba(223, 243, 235, 0.68);
         font-size: 0.77rem;
         font-weight: 700;
+      }
+
+      .vision-grid {
+        display: grid;
+        grid-template-columns: 1.08fr 0.92fr;
+        gap: 0.8rem;
+        margin: 0.9rem 0 1.4rem;
+      }
+
+      .vision-card {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 1.2rem 1.3rem;
+        background: rgba(255, 255, 255, 0.75);
+        box-shadow: 0 10px 30px rgba(25, 57, 50, 0.05);
+      }
+
+      .vision-card.accent {
+        background: linear-gradient(120deg, #e3f6ee, rgba(255, 255, 255, 0.94));
+        border-color: rgba(13, 124, 102, 0.24);
+      }
+
+      .vision-label {
+        color: var(--mint);
+        font-size: 0.67rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .vision-card h3 {
+        color: var(--ink);
+        font-size: 1.08rem;
+        letter-spacing: -0.02em;
+        margin: 0.36rem 0 0.45rem;
+      }
+
+      .vision-card p {
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.58;
+        margin: 0;
+      }
+
+      .use-case-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.45rem;
+        margin-top: 0.8rem;
+      }
+
+      .use-case {
+        border-radius: 10px;
+        padding: 0.58rem 0.65rem;
+        color: #25453e;
+        background: rgba(255, 255, 255, 0.72);
+        font-size: 0.72rem;
+        font-weight: 750;
+      }
+
+      .reality-note {
+        border-left: 3px solid var(--coral);
+        margin-top: 0.78rem;
+        padding-left: 0.75rem;
+        color: #5e6966;
+        font-size: 0.75rem;
+        line-height: 1.5;
+      }
+
+      .research-links {
+        color: var(--muted);
+        font-size: 0.69rem;
+        margin-top: 0.72rem;
+      }
+
+      .research-links a {
+        color: var(--mint-dark);
+        font-weight: 700;
+        text-decoration: none;
       }
 
       .section-kicker {
@@ -598,6 +718,7 @@ st.markdown(
       @media (max-width: 900px) {
         .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .pipeline-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .vision-grid { grid-template-columns: 1fr; }
         .quality-row { grid-template-columns: 110px 1fr 42px; }
       }
 
@@ -866,24 +987,24 @@ def _learned_selection_markup(fragments: list[Any]) -> str:
 st.markdown(
     """
     <section class="hero">
-      <div class="eyebrow">DNA data storage · file recovery engine</div>
-      <h1>Recover real files from noisy DNA reads.</h1>
+      <div class="eyebrow">AI-assisted recovery for future DNA archives</div>
+      <h1>Recover files from noisy DNA reads—exactly, or not at all.</h1>
       <p>
-        Turn bytes into synthesis-aware DNA fragments, simulate insertion, deletion, and
-        substitution errors, reconstruct every fragment, and accept the file only when its
-        SHA-256 integrity check passes.
+        Some files are used every day. Others are meant to survive: films, images, scientific
+        datasets, and cultural records. HelixTrace explores the recovery layer of future DNA
+        archives, reconstructing corrupted fragments without seeing the original and releasing
+        bytes only when integrity is verified.
       </p>
       <div class="scope-strip">
-        <span class="scope-pill">● Any small binary file</span>
-        <span class="scope-pill">● 50% GC constrained code</span>
-        <span class="scope-pill">● Learned candidate reranker</span>
-        <span class="scope-pill">● Cryptographic verification</span>
+        <span class="scope-pill">● Future cold archives</span>
+        <span class="scope-pill">● ML-assisted reconstruction</span>
+        <span class="scope-pill">● Insertion/deletion aware</span>
+        <span class="scope-pill">● Verified bytes only</span>
       </div>
     </section>
     """,
     unsafe_allow_html=True,
 )
-
 
 with st.sidebar:
     st.markdown('<div class="sidebar-brand">🧬 HelixTrace</div>', unsafe_allow_html=True)
@@ -893,8 +1014,8 @@ with st.sidebar:
         label_visibility="collapsed",
     )
     st.markdown(
-        '<div class="sidebar-note">Run a complete recovery or inspect one reconstruction '
-        "experiment. Every result is deterministic for the selected seed.</div>",
+        '<div class="sidebar-note">Recover a proof file or inspect one noisy-read experiment. '
+        "Every result is deterministic for the selected seed.</div>",
         unsafe_allow_html=True,
     )
     st.markdown('<div class="sidebar-rule"></div>', unsafe_allow_html=True)
@@ -909,34 +1030,38 @@ with st.sidebar:
         }
         with st.form("file_controls"):
             uploaded_file = st.file_uploader(
-                "Small file to recover",
+                "Proof file · 256-byte demo limit",
                 help=f"Any file type, up to {MAX_INTERACTIVE_FILE_BYTES} bytes in this demo.",
                 max_upload_size=1,
             )
-            st.caption(f"No upload? The built-in {DEFAULT_FILE_NAME} sample will be used.")
+            st.caption(
+                f"No upload? The built-in {DEFAULT_FILE_NAME} sample will be used. "
+                f"Interactive computation limit: {MAX_INTERACTIVE_FILE_BYTES} bytes."
+            )
             decoder_label = st.selectbox("Decoder", tuple(decoder_labels))
-            file_cluster_size = st.slider(
-                "Reads per fragment",
-                min_value=3,
-                max_value=15,
-                value=11,
-                step=1,
-            )
-            file_error_probability = st.slider(
-                "Probability per IDS event",
-                min_value=0.0,
-                max_value=0.05,
-                value=0.01,
-                step=0.005,
-                format="%.3f",
-            )
-            file_seed = st.number_input(
-                "Random seed",
-                min_value=0,
-                max_value=1_000_000,
-                value=DEFAULT_FILE_SEED,
-                key="file_seed",
-            )
+            with st.expander("Recovery settings"):
+                file_cluster_size = st.slider(
+                    "Reads per fragment",
+                    min_value=3,
+                    max_value=15,
+                    value=11,
+                    step=1,
+                )
+                file_error_probability = st.slider(
+                    "Probability per IDS event",
+                    min_value=0.0,
+                    max_value=0.05,
+                    value=0.01,
+                    step=0.005,
+                    format="%.3f",
+                )
+                file_seed = st.number_input(
+                    "Random seed",
+                    min_value=0,
+                    max_value=1_000_000,
+                    value=DEFAULT_FILE_SEED,
+                    key="file_seed",
+                )
             file_submitted = st.form_submit_button(
                 "Encode, simulate & recover",
                 use_container_width=True,
@@ -1006,6 +1131,54 @@ with st.sidebar:
 
 
 if workspace == "File recovery":
+    st.markdown('<div class="section-kicker">Why this matters</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section-title">The promise is not faster storage. It is longer-lived storage.</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        """
+        <div class="vision-grid">
+          <div class="vision-card accent">
+            <div class="vision-label">Why DNA?</div>
+            <h3>A possible medium for dense, durable cold archives</h3>
+            <p>
+              DNA is being researched for information that is written rarely and preserved for
+              decades, where information density, stability, and potentially low energy at rest can
+              matter more than instant access.
+            </p>
+            <div class="use-case-grid">
+              <div class="use-case">Film and image masters</div>
+              <div class="use-case">Scientific datasets</div>
+              <div class="use-case">Cultural collections</div>
+              <div class="use-case">Institutional records</div>
+            </div>
+          </div>
+          <div class="vision-card">
+            <div class="vision-label">Where HelixTrace fits</div>
+            <h3>Reliable readback from imperfect evidence</h3>
+            <p>
+              Sequencing does not return a perfect copy. Insertions, deletions, and substitutions
+              leave several noisy observations of each stored fragment. HelixTrace tests how fixed
+              methods and a small learned selector can reconstruct those fragments and recover
+              verified bytes.
+            </p>
+            <div class="reality-note">
+              DNA is not a replacement for cloud storage or SSDs today. Synthesis cost, read
+              latency, rewriting, fragment routing, and error correction remain major production
+              barriers. This app is a controlled software prototype focused on reconstruction.
+            </div>
+            <div class="research-links">
+              Research context:
+              <a href="https://www.nature.com/articles/s41467-021-21587-5" target="_blank">DNA stability</a>
+              · <a href="https://www.nature.com/articles/nbt.4079" target="_blank">large-scale retrieval</a>
+            </div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     if uploaded_file is None:
         file_data = DEFAULT_FILE_DATA
         file_name = DEFAULT_FILE_NAME
@@ -1121,6 +1294,15 @@ if workspace == "File recovery":
     )
 
     if str(_value(file_config, "decoder", "")) == "learned":
+        st.markdown('<div class="section-kicker">Where ML helps</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="section-title">Choose among plausible reconstructions</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            '<div class="section-copy">Four transparent methods propose candidates from the noisy reads. A small trained ridge model ranks those candidates from read agreement and sequence features; it does not invent DNA or see the hidden source.</div>',
+            unsafe_allow_html=True,
+        )
         st.markdown("**Learned selector decisions across fragments**")
         st.markdown(_learned_selection_markup(file_fragments), unsafe_allow_html=True)
         agreement_count = sum(
@@ -1218,7 +1400,12 @@ elif probability_sum > 1.0:
 should_run = submitted or "experiment_result" not in st.session_state
 if should_run:
     if validation_error:
+        st.session_state.pop("experiment_result", None)
+        st.session_state.pop("experiment_configuration", None)
+        st.session_state.pop("ai_analysis", None)
+        st.session_state.pop("guided_analysis", None)
         st.error(validation_error)
+        st.stop()
     else:
         experiment_result = _run_configuration(configuration)
         if experiment_result is not None:
