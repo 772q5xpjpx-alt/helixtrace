@@ -4,16 +4,17 @@
 
 **Live demo:** https://helixtrace.streamlit.app
 
-Some files are used every day. Others are meant to survive: film and image masters, scientific
-datasets, cultural collections, and institutional records. Synthetic DNA is being researched as a
-future medium for this kind of cold archive because information density, long-term stability, and
-potentially low energy at rest can matter more than instant access.
+Some files are used every day. Others are meant to outlive the hardware they sit on: film and image
+masters, scientific datasets, cultural collections, and institutional records. Synthetic DNA is
+being researched as a future medium for this kind of cold archive because information density,
+long-term stability, and potentially low energy at rest can matter more than instant access.
 
-HelixTrace explores one difficult part of that future system: **reliable readback**. It takes a small
-binary file through a controlled DNA-storage path—encoding, fragmentation, synthetic insertion,
-deletion, and substitution reads, ML-assisted reconstruction, byte decoding, and SHA-256
-verification. The reconstructor receives only the noisy read clusters. It releases a file only when
-the recovered bytes match the digest embedded before the channel.
+HelixTrace explores one difficult recovery layer in that future system: **reliable readback**. It
+takes a small binary file through a controlled DNA-storage path—encoding, fragmentation, synthetic
+insertion, deletion, and substitution reads, ML-assisted reconstruction, byte decoding, and
+SHA-256 verification. The reconstructor receives only the noisy read clusters. It releases a file
+only when the recovered bytes match the digest embedded before the channel. A plausible-looking
+near miss is reported as failure, not success.
 
 This is a free, open-source **Developer Tools** prototype for testing DNA-storage reconstruction
 ideas. The public app needs no account, API key, credits, or paid service.
