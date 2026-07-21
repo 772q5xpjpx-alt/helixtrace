@@ -15,7 +15,11 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
   https://devpost.com/software/helixtrace
 - [x] Original submitted repository commit: `af9ed923e60359e2c416eb2e7d0be0904a884d0f` (`main`).
 - [x] Final app and submission-document update: `611c4e4` (`main`), pushed July 21, 2026.
-- [x] Final GitHub Actions CI completed successfully for the submitted commit.
+- [x] Final checklist update `28c326e` passed GitHub Actions CI:
+  https://github.com/772q5xpjpx-alt/helixtrace/actions/runs/29847470857
+- [x] Devpost fields and public page rechecked July 21, 2026 at 18:25 CEST: the new video is
+  embedded, the current judge instructions persist, and finalization still displays
+  `Project submitted!`.
 - [x] Anonymous Streamlit session check followed the normal authentication bootstrap back to the
   app and returned HTTP 200: https://helixtrace.streamlit.app
 
@@ -120,6 +124,8 @@ Status key: `[x]` verified locally; `[ ]` still requires action or external conf
   https://youtu.be/-ZeMx-drbGg
 - [x] Verify the full YouTube video and audio in a signed-out/incognito browser.
 - [x] Save the public YouTube URL for Devpost.
+- [x] Remove the superseded public upload and duplicate draft; YouTube Studio now lists only the
+  final public video.
 
 ## Hosting and judge access
 
